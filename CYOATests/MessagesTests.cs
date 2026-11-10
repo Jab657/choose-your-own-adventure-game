@@ -126,6 +126,49 @@ public class MessagesTests
         messages.SetCurrentLanguage("French");
         messages.ReadDictionary();
         Assert.AreEqual("Au revoir!", messages.GetMessage("goodbye"));
+
+        messages.SetCurrentLanguage("Italian");
+        messages.ReadDictionary();
+        Assert.AreEqual("Arrivederci!", messages.GetMessage("goodbye"));
+    }
+
+    [TestMethod]
+    public void ReadDictionary_LoadsItalianWelcomeMessage()
+    {
+        Messages messages = new Messages();
+        messages.SetCurrentLanguage("Italian");
+        messages.ReadDictionary();
+        Assert.AreEqual("Benvenuto in Scegli la Tua Avventura", messages.GetMessage("welcome"));
+    }
+
+    [TestMethod]
+    public void ReadDictionary_ItalianHasSameKeysAsEnglish()
+    {
+        Messages english = new Messages();
+        english.SetCurrentLanguage("English");
+        english.ReadDictionary();
+
+        string jsonPath = Path.Combine(AppContext.BaseDirectory, "language_data.json");
+        using System.Text.Json.JsonDocument doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(jsonPath));
+        var englishKeys = doc.RootElement.GetProperty("English").GetProperty("dictionary").EnumerateObject().Select(p => p.Name);
+
+        Messages italian = new Messages();
+        italian.SetCurrentLanguage("Italian");
+        italian.ReadDictionary();
+
+        foreach (string key in englishKeys)
+            Assert.AreNotEqual($"[{key}]", italian.GetMessage(key), $"Key '{key}' is missing from Italian dictionary.");
+    }
+
+    [TestMethod]
+    public void ItalianRaceAndOccupationInputsNormalizeToCanonical()
+    {
+        Messages messages = new Messages();
+        messages.SetCurrentLanguage("Italian");
+        messages.ReadDictionary();
+        Assert.AreEqual("Dwarf", messages.NormalizeRace("Nano"));
+        Assert.AreEqual("Archer", messages.NormalizeOccupation("arciere"));
+        Assert.AreEqual("spada lunga", messages.TranslateWeaponForDisplay("long sword"));
     }
 
     [TestMethod]
