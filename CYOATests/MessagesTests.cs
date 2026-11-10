@@ -10,6 +10,27 @@ public class MessagesTests
     }
 
     [TestMethod]
+    public void TranslateRaceForDisplay_BeforeReadDictionary_ReturnsInput()
+    {
+        Messages messages = new Messages();
+        Assert.AreEqual("Elf", messages.TranslateRaceForDisplay("Elf"));
+    }
+
+    [TestMethod]
+    public void TranslateOccupationForDisplay_BeforeReadDictionary_ReturnsInput()
+    {
+        Messages messages = new Messages();
+        Assert.AreEqual("Fighter", messages.TranslateOccupationForDisplay("Fighter"));
+    }
+
+    [TestMethod]
+    public void TranslateWeaponForDisplay_BeforeReadDictionary_ReturnsInput()
+    {
+        Messages messages = new Messages();
+        Assert.AreEqual("dagger", messages.TranslateWeaponForDisplay("dagger"));
+    }
+
+    [TestMethod]
     public void SetCurrentLanguage_SetsLanguageToSpanish()
     {
         Messages messages = new Messages();
