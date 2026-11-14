@@ -4,13 +4,13 @@
 
 **Blocked by:** 04 (Buy Magical Armor), for the shared purchase rules only.
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Buying the weapon reduces Gold by 20, keeps the player's existing weapon, adds +4 to its maximum damage, and switches it to its magical variant; ASCII art is unchanged.
-- [ ] Verified for all four occupations: long sword 12→16, lightning bolt spell 12→16, dagger 6→10, long bow 8→12.
-- [ ] With less than 20 Gold, the purchase returns NotEnoughGold and Gold and weapon are unchanged.
-- [ ] After any purchase, a further purchase returns AlreadyTraded.
-- [ ] `w` / `weapon` (and the translated full word in each language) buys the weapon in the visit.
-- [ ] Each language's weapon display map has a full, grammatically correct name for each of the four magical weapons (no "magical {0}" pattern).
-- [ ] A test verifies every magical weapon name translates to a non-placeholder value in all four languages.
-- [ ] Stats and attack text show the magical name and the new maximum damage.
+- [x] Buying the weapon reduces Gold by 20, keeps the player's existing weapon, adds +4 to its maximum damage, and switches it to its magical variant; ASCII art is unchanged.
+- [x] Verified for all four occupations: long sword 12→16, lightning bolt spell 12→16, dagger 6→10, long bow 8→12.
+- [x] With less than 20 Gold, the purchase returns NotEnoughGold and Gold and weapon are unchanged.
+- [x] After any purchase, a further purchase returns AlreadyTraded.
+- [x] `w` / `weapon` (and the translated full word in each language) buys the weapon in the visit.
+- [x] Each language's weapon display map has a full, grammatically correct name for each of the four magical weapons (no "magical {0}" pattern).
+- [x] A test verifies every magical weapon name translates to a non-placeholder value in all four languages.
+- [x] Stats and attack text show the magical name and the new maximum damage.
