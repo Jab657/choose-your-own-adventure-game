@@ -9,6 +9,7 @@ public class Messages
     private Dictionary<string, string> _displayRaceMap;
     private Dictionary<string, string> _displayOccupationMap;
     private Dictionary<string, string> _displayWeaponMap;
+    private Dictionary<string, string> _merchantChoiceMap;
 
     public Messages()
     {
@@ -19,6 +20,7 @@ public class Messages
         _displayRaceMap = new Dictionary<string, string>();
         _displayOccupationMap = new Dictionary<string, string>();
         _displayWeaponMap = new Dictionary<string, string>();
+        _merchantChoiceMap = new Dictionary<string, string>();
     }
 
     public void SetCurrentLanguage(string language)
@@ -57,6 +59,10 @@ public class Messages
         _displayWeaponMap = new Dictionary<string, string>();
         foreach (JsonProperty entry in langSection.GetProperty("displayWeaponMap").EnumerateObject())
             _displayWeaponMap[entry.Name] = entry.Value.GetString() ?? string.Empty;
+
+        _merchantChoiceMap = new Dictionary<string, string>();
+        foreach (JsonProperty entry in langSection.GetProperty("merchantChoiceMap").EnumerateObject())
+            _merchantChoiceMap[entry.Name] = entry.Value.GetString() ?? string.Empty;
     }
 
     public string GetMessage(string key)
@@ -99,6 +105,13 @@ public class Messages
     public string TranslateWeaponForDisplay(string weaponType)
     {
         return _displayWeaponMap.TryGetValue(weaponType, out string? translated) ? translated : weaponType;
+    }
+
+    // Returns "armor", "weapon" or "leave" for a Merchant menu input in the current language, or null if invalid.
+    public string? NormalizeMerchantChoice(string? input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return null;
+        return _merchantChoiceMap.TryGetValue(input.Trim().ToLower(), out string? canonical) ? canonical : null;
     }
 
 

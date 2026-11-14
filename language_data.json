@@ -39,7 +39,13 @@
       "adventure_ends": "Adventure ends. Bye.",
       "path_prompt_full": "You are walking in the mountains. You see two paths, one leading north and higher into the mountains. The other path leads south and into the woods. Which do you take? Enter 'n' for North. Enter 's' for South. Enter 'e' for exit game.",
       "path_invalid": "Invalid choice. Please enter 'n', 's', or 'e'.",
-      "south_path_narrative": "You take the South path. After many long days, nothing adventurous happens. You are bored and return home, poor, and still bored.",
+      "merchant_intro": "You take the South path. Beside the trail stands a small wooden stall, and a cheerful man waves you over. 'Greetings, traveller! I am Oswin, a Merchant. I have treasures to sell, but you may buy only one.'",
+      "merchant_offer_armor": "a. Magical Armor - {0} Gold",
+      "merchant_offer_weapon": "w. Magical Weapon - {0} Gold",
+      "merchant_gold": "You have {0} Gold.",
+      "merchant_prompt": "Enter 'a' for armor, 'w' for weapon, or 'l' to leave.",
+      "merchant_leave": "You thank Oswin and walk away. When you glance back, the stall has vanished.",
+      "merchant_empty_stall": "You take the South path and find Oswin's stall empty. The Merchant is gone.",
       "north_path_narrative": "You take the North path. After walking for hours, the air grows colder, and the trees become more sparse. You are confronted with a dragon. The dragon has a hoard of gold behind it.",
       "dragon_intro": "The dragon says 'I am {0}. Leave or perish!'",
       "dragon_stats_intro": "Your magic ring gives you the stats on the dragon.",
@@ -102,6 +108,14 @@
       "dagger": "dagger",
       "long bow": "long bow",
       "claws": "claws"
+    },
+    "merchantChoiceMap": {
+      "a": "armor",
+      "armor": "armor",
+      "w": "weapon",
+      "weapon": "weapon",
+      "l": "leave",
+      "leave": "leave"
     }
   },
   "Spanish": {
@@ -144,7 +158,13 @@
       "adventure_ends": "La aventura termina. Adios.",
       "path_prompt_full": "Estas caminando en las montanas. Ves dos caminos, uno va al norte y mas arriba en las montanas. El otro va al sur y hacia el bosque. Cual tomas? Escribe 'n' para Norte. Escribe 's' para Sur. Escribe 'e' para salir del juego.",
       "path_invalid": "Opcion invalida. Por favor escribe 'n', 's' o 'e'.",
-      "south_path_narrative": "Tomas el camino del sur. Despues de muchos dias largos, no pasa nada aventurero. Te aburres y regresas a casa, pobre y todavia aburrido.",
+      "merchant_intro": "Tomas el camino del sur. Junto al sendero hay un pequeno puesto de madera, y un hombre alegre te hace senas. 'Saludos, viajero! Soy Oswin, un Mercader. Tengo tesoros para vender, pero solo puedes comprar uno.'",
+      "merchant_offer_armor": "a. Armadura Magica - {0} de Oro",
+      "merchant_offer_weapon": "w. Arma Magica - {0} de Oro",
+      "merchant_gold": "Tienes {0} de Oro.",
+      "merchant_prompt": "Escribe 'a' para armadura, 'w' para arma o 'l' para salir.",
+      "merchant_leave": "Agradeces a Oswin y te alejas. Cuando miras atras, el puesto ha desaparecido.",
+      "merchant_empty_stall": "Tomas el camino del sur y encuentras vacio el puesto de Oswin. El Mercader se ha ido.",
       "north_path_narrative": "Tomas el camino del norte. Despues de caminar durante horas, el aire se vuelve mas frio y los arboles mas escasos. Te enfrentas a un dragon. El dragon tiene una horda de oro detras de el.",
       "dragon_intro": "El dragon dice 'Soy {0}. Vete o perece!'",
       "dragon_stats_intro": "Tu anillo magico te da las estadisticas del dragon.",
@@ -207,6 +227,14 @@
       "dagger": "daga",
       "long bow": "arco largo",
       "claws": "garras"
+    },
+    "merchantChoiceMap": {
+      "a": "armor",
+      "armadura": "armor",
+      "w": "weapon",
+      "arma": "weapon",
+      "l": "leave",
+      "salir": "leave"
     }
   },
   "French": {
@@ -249,7 +277,13 @@
       "adventure_ends": "L'aventure se termine. Au revoir.",
       "path_prompt_full": "Vous marchez dans les montagnes. Vous voyez deux chemins, l'un mene vers le nord et plus haut dans les montagnes. L'autre mene vers le sud et dans les bois. Lequel choisissez-vous ? Tapez 'n' pour Nord. Tapez 's' pour Sud. Tapez 'e' pour quitter le jeu.",
       "path_invalid": "Choix invalide. Veuillez taper 'n', 's' ou 'e'.",
-      "south_path_narrative": "Vous prenez le chemin du sud. Apres de longues journees, rien d'aventureux n'arrive. Vous vous ennuyez et rentrez chez vous, pauvre et toujours ennuye.",
+      "merchant_intro": "Vous prenez le chemin du sud. Au bord du sentier se dresse un petit etal en bois, et un homme jovial vous fait signe. 'Salutations, voyageur ! Je suis Oswin, un Marchand. J'ai des tresors a vendre, mais vous ne pouvez en acheter qu'un seul.'",
+      "merchant_offer_armor": "a. Armure Magique - {0} pieces d'or",
+      "merchant_offer_weapon": "w. Arme Magique - {0} pieces d'or",
+      "merchant_gold": "Vous avez {0} pieces d'or.",
+      "merchant_prompt": "Tapez 'a' pour l'armure, 'w' pour l'arme ou 'l' pour partir.",
+      "merchant_leave": "Vous remerciez Oswin et repartez. Quand vous vous retournez, l'etal a disparu.",
+      "merchant_empty_stall": "Vous prenez le chemin du sud et trouvez l'etal d'Oswin vide. Le Marchand est parti.",
       "north_path_narrative": "Vous prenez le chemin du nord. Apres avoir marche pendant des heures, l'air devient plus froid et les arbres plus rares. Vous etes confronte a un dragon. Le dragon a un tresor d'or derriere lui.",
       "dragon_intro": "Le dragon dit 'Je suis {0}. Pars ou peris !'",
       "dragon_stats_intro": "Votre anneau magique vous donne les statistiques du dragon.",
@@ -312,6 +346,14 @@
       "dagger": "dague",
       "long bow": "arc long",
       "claws": "griffes"
+    },
+    "merchantChoiceMap": {
+      "a": "armor",
+      "armure": "armor",
+      "w": "weapon",
+      "arme": "weapon",
+      "l": "leave",
+      "partir": "leave"
     }
   },
   "Italian": {
@@ -354,7 +396,13 @@
       "adventure_ends": "L'avventura finisce. Arrivederci.",
       "path_prompt_full": "Stai camminando tra le montagne. Vedi due sentieri, uno porta a nord e piu in alto sulle montagne. L'altro porta a sud e nel bosco. Quale prendi? Scrivi 'n' per Nord. Scrivi 's' per Sud. Scrivi 'e' per uscire dal gioco.",
       "path_invalid": "Scelta non valida. Per favore scrivi 'n', 's' o 'e'.",
-      "south_path_narrative": "Prendi il sentiero a sud. Dopo molti lunghi giorni, non succede nulla di avventuroso. Ti annoi e torni a casa, povero e ancora annoiato.",
+      "merchant_intro": "Prendi il sentiero a sud. Accanto al sentiero c'e una piccola bancarella di legno, e un uomo allegro ti fa cenno. 'Salve, viaggiatore! Sono Oswin, un Mercante. Ho tesori da vendere, ma puoi comprarne solo uno.'",
+      "merchant_offer_armor": "a. Armatura Magica - {0} monete d'oro",
+      "merchant_offer_weapon": "w. Arma Magica - {0} monete d'oro",
+      "merchant_gold": "Hai {0} monete d'oro.",
+      "merchant_prompt": "Scrivi 'a' per l'armatura, 'w' per l'arma o 'l' per lasciare.",
+      "merchant_leave": "Ringrazi Oswin e te ne vai. Quando ti volti, la bancarella e scomparsa.",
+      "merchant_empty_stall": "Prendi il sentiero a sud e trovi vuota la bancarella di Oswin. Il Mercante se n'e andato.",
       "north_path_narrative": "Prendi il sentiero a nord. Dopo aver camminato per ore, l'aria si fa piu fredda e gli alberi piu radi. Ti trovi di fronte a un drago. Il drago ha un tesoro d'oro alle sue spalle.",
       "dragon_intro": "Il drago dice 'Sono {0}. Vattene o perisci!'",
       "dragon_stats_intro": "Il tuo anello magico ti mostra le statistiche del drago.",
@@ -417,6 +465,14 @@
       "dagger": "pugnale",
       "long bow": "arco lungo",
       "claws": "artigli"
+    },
+    "merchantChoiceMap": {
+      "a": "armor",
+      "armatura": "armor",
+      "w": "weapon",
+      "arma": "weapon",
+      "l": "leave",
+      "lasciare": "leave"
     }
   }
 }

@@ -41,6 +41,7 @@ public class Game
             {
                 Player player = new Player();
                 player.CreateCharacter(messages);
+                Merchant merchant = new Merchant();
 
                 bool inAdventureMenu = true;
                 while (inAdventureMenu)
@@ -55,7 +56,7 @@ public class Game
                     }
                     else if (selectedPath == "south")
                     {
-                        Console.WriteLine(messages.GetMessage("south_path_narrative"));
+                        merchant.Visit(player, messages);
                     }
                     else if (selectedPath == "north")
                     {
