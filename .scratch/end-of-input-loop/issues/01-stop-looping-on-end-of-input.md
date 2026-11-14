@@ -4,9 +4,9 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] At every prompt, end of input ends the game cleanly instead of looping.
-- [ ] Behavior for normal input, including invalid-choice re-prompting, is unchanged.
-- [ ] A test feeds a console input that ends early and asserts the game returns rather than hanging.
-- [ ] All existing tests pass.
+- [x] At every prompt, end of input ends the game cleanly instead of looping.
+- [x] Behavior for normal input, including invalid-choice re-prompting, is unchanged.
+- [x] A test feeds a console input that ends early and asserts the game returns rather than hanging.
+- [x] All existing tests pass.
