@@ -126,6 +126,26 @@ public class DragonTests
 
         Assert.IsTrue(player.HealthPoints >= 0);
     }
+
+    [TestMethod]
+    public void Attack_HitPastDefense_ReducesPlayerHealthByExactlyTheDamageRoll()
+    {
+        // Dragon creation: Strength 15, Agility 10, Health Points 20.
+        // Attack: attack roll 5 (hits, <= Strength 15), defense roll 20 (fails, > player Agility 10), damage roll 7.
+        ScriptedDie die = new ScriptedDie(15, 10, 20, 5, 20, 7);
+        Dragon dragon = new Dragon(die);
+
+        Player player = new Player
+        {
+            Name = "TestHero",
+            Agility = 10,
+            HealthPoints = 30
+        };
+
+        dragon.Attack(player, GetMessages());
+
+        Assert.AreEqual(23, player.HealthPoints);
+    }
 }
 
 [TestClass]

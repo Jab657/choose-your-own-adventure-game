@@ -6,8 +6,8 @@
 
 **Status:** ready-for-agent
 
-- [ ] The die's roll operation can be overridden by a test double; normal games still roll randomly.
-- [ ] The test project has a scripted die that returns a given sequence of rolls in order.
-- [ ] A test scripts a dragon attack (attack roll hits, defense roll fails, a chosen damage roll) and asserts the player's Health Points drop by exactly that damage.
-- [ ] The player still creates its own die; no change to how the player is constructed.
-- [ ] All existing tests pass.
+- [x] The die's roll operation can be overridden by a test double; normal games still roll randomly.
+- [x] The test project has a scripted die that returns a given sequence of rolls in order.
+- [x] A test scripts a dragon attack (attack roll hits, defense roll fails, a chosen damage roll) and asserts the player's Health Points drop by exactly that damage.
+- [x] The player still creates its own die; no change to how the player is constructed.
+- [x] All existing tests pass.
