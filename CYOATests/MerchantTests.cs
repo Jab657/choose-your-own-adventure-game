@@ -381,7 +381,7 @@ public class MerchantTests
         Messages messages = CreateMessages("English");
         RunWithConsole("l\n", () => merchant.Visit(player, messages));
 
-        // No input is scripted: if the second visit prompted, ReadLine would return null and loop forever.
+        // No input is scripted: if the second visit prompted, reading would throw EndOfInputException.
         string output = RunWithConsole("", () => merchant.Visit(player, messages));
 
         StringAssert.Contains(output, messages.GetMessage("merchant_empty_stall"));

@@ -37,10 +37,10 @@ public class Player
         while (true)
         {
             Console.WriteLine(messages.GetMessage("race_prompt"));
-            string? input = Console.ReadLine()?.Trim();
+            string input = ConsoleInput.ReadLine().Trim();
 
             if (messages.IsValidRace(input))
-                return messages.NormalizeRace(input!);
+                return messages.NormalizeRace(input);
 
             Console.WriteLine(messages.GetMessage("race_invalid"));
         }
@@ -51,7 +51,7 @@ public class Player
         while (true)
         {
             Console.WriteLine(messages.GetMessage("name_prompt"));
-            string? input = Console.ReadLine()?.Trim();
+            string input = ConsoleInput.ReadLine().Trim();
 
             if (!string.IsNullOrWhiteSpace(input))
                 return input;
@@ -65,10 +65,10 @@ public class Player
         while (true)
         {
             Console.WriteLine(messages.GetMessage("occupation_prompt"));
-            string? input = Console.ReadLine()?.Trim();
+            string input = ConsoleInput.ReadLine().Trim();
 
             if (messages.IsValidOccupation(input))
-                return messages.NormalizeOccupation(input!);
+                return messages.NormalizeOccupation(input);
 
             Console.WriteLine(messages.GetMessage("occupation_invalid"));
         }
@@ -130,7 +130,7 @@ public class Player
         while (true)
         {
             Console.WriteLine(messages.GetMessage("next_action"));
-            string? input = Console.ReadLine()?.Trim();
+            string input = ConsoleInput.ReadLine().Trim();
 
             if (input == "1")
                 DisplayStats(messages);
@@ -241,7 +241,7 @@ public class Player
         while (true)
         {
             Console.WriteLine(prompt);
-            string? input = Console.ReadLine()?.Trim().ToLower();
+            string input = ConsoleInput.ReadLine().Trim().ToLower();
 
             if (input == "roll")
                 return;

@@ -2,6 +2,20 @@ public class Game
 {
     public void StartGame()
     {
+        try
+        {
+            PlayGame();
+        }
+        catch (EndOfInputException)
+        {
+            // Input ended at a prompt: stop the game instead of re-prompting forever.
+            // The newline keeps the shell prompt off the unanswered game prompt.
+            Console.WriteLine();
+        }
+    }
+
+    private void PlayGame()
+    {
         // Title screen
         Console.WriteLine("=====================================");
         Console.WriteLine("Welcome to Choose Your Adventure Game");
@@ -16,7 +30,7 @@ public class Game
         Console.WriteLine("Select language / Selecciona idioma / Choisissez la langue / Scegli la lingua:");
         Console.WriteLine("1. English  2. Espanol  3. Francais  4. Italiano");
         Console.Write("Enter choice: ");
-        string? langInput = Console.ReadLine()?.Trim();
+        string langInput = ConsoleInput.ReadLine().Trim();
         string selectedLanguage = langInput switch { "2" => "Spanish", "3" => "French", "4" => "Italian", _ => "English" };
 
         // Initialize Messages with selected language (per sequence diagram)
@@ -35,7 +49,7 @@ public class Game
         {
             Console.WriteLine(messages.GetMessage("menu"));
             Console.Write(messages.GetMessage("enter_choice"));
-            string? choice = Console.ReadLine()?.Trim();
+            string choice = ConsoleInput.ReadLine().Trim();
 
             if (choice == "1")
             {
@@ -119,7 +133,7 @@ public class Game
         {
             Console.WriteLine(messages.GetMessage("path_prompt_full"));
             Console.Write(messages.GetMessage("enter_choice"));
-            string? input = Console.ReadLine()?.Trim().ToLower();
+            string input = ConsoleInput.ReadLine().Trim().ToLower();
 
             if (input == "north" || input == "n")
                 return "north";
@@ -148,7 +162,7 @@ public class Game
         {
             Console.WriteLine(messages.GetMessage("dragon_encounter_prompt"));
             Console.Write(messages.GetMessage("enter_choice"));
-            string? input = Console.ReadLine()?.Trim().ToLower();
+            string input = ConsoleInput.ReadLine().Trim().ToLower();
 
             if (input == "a" || input == "attack")
             {

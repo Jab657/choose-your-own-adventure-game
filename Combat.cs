@@ -31,7 +31,7 @@ public class Combat
                 return false;
 
             Console.WriteLine(messages.GetMessage("attack_prompt"));
-            string? input = Console.ReadLine()?.Trim().ToLower();
+            string input = ConsoleInput.ReadLine().Trim().ToLower();
 
             if (input == "r" || input == "retreat")
             {

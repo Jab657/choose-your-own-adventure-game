@@ -74,7 +74,7 @@ public class Merchant
         {
             Console.WriteLine(messages.GetMessage("merchant_prompt"));
             Console.Write(messages.GetMessage("enter_choice"));
-            string? choice = messages.NormalizeMerchantChoice(Console.ReadLine());
+            string? choice = messages.NormalizeMerchantChoice(ConsoleInput.ReadLine());
 
             MerchantItem? item = choice switch
             {
