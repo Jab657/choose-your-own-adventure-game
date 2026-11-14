@@ -146,6 +146,29 @@ public class CombatTests
     }
 
     [TestMethod]
+    public void GetCombatStatsDisplay_WithArmor_ShowsArmorLine()
+    {
+        Player player = CreateTestPlayer();
+        player.Armor = Armor.MagicalArmor();
+        Combat combat = new Combat(player, CreateTestDragon(), CreateEnglishMessages());
+
+        string result = combat.GetCombatStatsDisplay();
+
+        CollectionAssert.Contains(result.Split(Environment.NewLine), "Armor: Magical Armor (absorbs 3 damage)");
+    }
+
+    [TestMethod]
+    public void GetCombatStatsDisplay_WithoutArmor_ShowsNoArmorLine()
+    {
+        Messages messages = CreateEnglishMessages();
+        Combat combat = new Combat(CreateTestPlayer(), CreateTestDragon(), messages);
+
+        string result = combat.GetCombatStatsDisplay();
+
+        Assert.IsFalse(result.Contains(messages.GetMessage("stats_armor")));
+    }
+
+    [TestMethod]
     public void GetCombatStatsDisplay_UsesLocalizedStatLabels()
     {
         Player player = CreateTestPlayer();

@@ -77,4 +77,33 @@ public class PlayerTests
         string[] lines = output.Split(Environment.NewLine);
         CollectionAssert.Contains(lines, expectedLine);
     }
+
+    [TestMethod]
+    [DoNotParallelize]
+    [DataRow("English", "Armor: Magical Armor (absorbs 3 damage)")]
+    [DataRow("Spanish", "Armadura: Armadura Magica (absorbe 3 de dano)")]
+    [DataRow("French", "Armure: Armure Magique (absorbe 3 degats)")]
+    [DataRow("Italian", "Armatura: Armatura Magica (assorbe 3 danni)")]
+    public void DisplayStats_WithArmor_ShowsArmorLine(string language, string expectedLine)
+    {
+        Messages messages = CreateMessages(language);
+        Player player = new Player { Name = "Aria", Race = "Human", Occupation = "Fighter", Armor = Armor.MagicalArmor() };
+
+        string output = RunWithConsole("", () => player.DisplayStats(messages));
+
+        string[] lines = output.Split(Environment.NewLine);
+        CollectionAssert.Contains(lines, expectedLine);
+    }
+
+    [TestMethod]
+    [DoNotParallelize]
+    public void DisplayStats_WithoutArmor_ShowsNoArmorLine()
+    {
+        Messages messages = CreateMessages("English");
+        Player player = new Player { Name = "Aria", Race = "Human", Occupation = "Fighter" };
+
+        string output = RunWithConsole("", () => player.DisplayStats(messages));
+
+        Assert.IsFalse(output.Contains(messages.GetMessage("stats_armor")));
+    }
 }

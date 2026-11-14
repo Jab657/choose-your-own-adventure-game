@@ -49,6 +49,52 @@ public class MerchantTests
     }
 
     [TestMethod]
+    public void Purchase_MagicalArmor_TakesFifteenGoldAndGivesArmorThatAbsorbsThree()
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+
+        PurchaseResult result = merchant.Purchase(player, MerchantItem.MagicalArmor);
+
+        Assert.AreEqual(PurchaseResult.Bought, result);
+        Assert.AreEqual(5, player.Gold);
+        Assert.IsNotNull(player.Armor);
+        Assert.AreEqual(3, player.Armor.Absorption);
+        Assert.IsTrue(merchant.HasTraded);
+    }
+
+    [TestMethod]
+    public void Purchase_MagicalArmorWithLessThanFifteenGold_IsRefusedAndChangesNothing()
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+        player.Gold = 14;
+
+        PurchaseResult result = merchant.Purchase(player, MerchantItem.MagicalArmor);
+
+        Assert.AreEqual(PurchaseResult.NotEnoughGold, result);
+        Assert.AreEqual(14, player.Gold);
+        Assert.IsNull(player.Armor);
+        Assert.IsFalse(merchant.HasTraded);
+    }
+
+    [TestMethod]
+    public void Purchase_AfterAPurchase_IsRefusedAsAlreadyTraded()
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+        player.Gold = 40;
+        merchant.Purchase(player, MerchantItem.MagicalArmor);
+        Armor firstArmor = player.Armor!;
+
+        PurchaseResult result = merchant.Purchase(player, MerchantItem.MagicalArmor);
+
+        Assert.AreEqual(PurchaseResult.AlreadyTraded, result);
+        Assert.AreEqual(25, player.Gold);
+        Assert.AreSame(firstArmor, player.Armor);
+    }
+
+    [TestMethod]
     public void Visit_FirstVisit_ShowsOswinsOfferAndPlayersGold()
     {
         Merchant merchant = new Merchant();
@@ -61,6 +107,53 @@ public class MerchantTests
         StringAssert.Contains(output, "Magical Armor - 15 Gold");
         StringAssert.Contains(output, "Magical Weapon - 20 Gold");
         StringAssert.Contains(output, "You have 20 Gold.");
+    }
+
+    [TestMethod]
+    [DataRow("English", "a")]
+    [DataRow("English", "armor")]
+    [DataRow("English", " ARMOR ")]
+    [DataRow("Spanish", "armadura")]
+    [DataRow("French", "armure")]
+    [DataRow("Italian", "armatura")]
+    public void Visit_ChooseArmor_BuysMagicalArmorAndEndsVisit(string language, string input)
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+        Messages messages = CreateMessages(language);
+
+        string output = RunWithConsole(input + "\n", () => merchant.Visit(player, messages));
+
+        Assert.AreEqual(5, player.Gold);
+        Assert.IsNotNull(player.Armor);
+        Assert.IsTrue(merchant.HasTraded);
+        Assert.AreNotEqual("[merchant_bought_armor]", messages.GetMessage("merchant_bought_armor"));
+        StringAssert.Contains(output, string.Format(messages.GetMessage("merchant_bought_armor"), 15));
+    }
+
+    [TestMethod]
+    [DataRow("English")]
+    [DataRow("Spanish")]
+    [DataRow("French")]
+    [DataRow("Italian")]
+    public void Visit_ChooseArmorWithoutEnoughGold_ShowsRefusalAndPromptsAgain(string language)
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+        player.Gold = 10;
+        Messages messages = CreateMessages(language);
+
+        string output = RunWithConsole("a\nl\n", () => merchant.Visit(player, messages));
+
+        string refusal = messages.GetMessage("merchant_not_enough_gold");
+        Assert.AreNotEqual("[merchant_not_enough_gold]", refusal);
+        StringAssert.Contains(output, string.Format(refusal, 15, 10));
+        int promptCount = output.Split(messages.GetMessage("merchant_prompt")).Length - 1;
+        Assert.AreEqual(2, promptCount);
+        Assert.IsFalse(output.Contains(messages.GetMessage("invalid")));
+        Assert.AreEqual(10, player.Gold);
+        Assert.IsNull(player.Armor);
+        StringAssert.Contains(output, messages.GetMessage("merchant_leave"));
     }
 
     [TestMethod]

@@ -64,6 +64,9 @@ public class Combat
             output.Add(messages.GetMessage("stats_damage") + player.Weapon.MaxDamage);
         }
 
+        if (player.Armor != null)
+            output.Add(messages.GetMessage("stats_armor") + string.Format(messages.GetMessage("magical_armor_display"), player.Armor.Absorption));
+
         output.Add("");
         output.Add(messages.GetMessage("combat_dragon_header"));
         output.Add(messages.GetMessage("stats_name") + dragon.Name);

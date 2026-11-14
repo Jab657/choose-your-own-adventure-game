@@ -146,6 +146,60 @@ public class DragonTests
 
         Assert.AreEqual(23, player.HealthPoints);
     }
+
+    [TestMethod]
+    public void Attack_HitPastDefenseOnArmoredPlayer_ReducesDamageByThree()
+    {
+        // Dragon creation: Strength 15, Agility 10, Health Points 20.
+        // Attack: attack roll 5 (hits), defense roll 20 (fails), damage roll 7, armor absorbs 3.
+        ScriptedDie die = new ScriptedDie(15, 10, 20, 5, 20, 7);
+        Dragon dragon = new Dragon(die);
+        Messages messages = GetMessages();
+
+        Player player = new Player
+        {
+            Name = "TestHero",
+            Agility = 10,
+            HealthPoints = 30,
+            Armor = Armor.MagicalArmor()
+        };
+
+        string result = dragon.Attack(player, messages);
+
+        Assert.AreEqual(26, player.HealthPoints);
+        StringAssert.Contains(result, string.Format(messages.GetMessage("dragon_damage_dealt"), dragon.Name, 4));
+    }
+
+    [TestMethod]
+    [DataRow("English", 1)]
+    [DataRow("English", 3)]
+    [DataRow("Spanish", 3)]
+    [DataRow("French", 3)]
+    [DataRow("Italian", 2)]
+    public void Attack_HitOfThreeOrLessOnArmoredPlayer_IsAbsorbedAndLeavesHealthUnchanged(string language, int damageRoll)
+    {
+        // Dragon creation: Strength 15, Agility 10, Health Points 20.
+        // Attack: attack roll 5 (hits), defense roll 20 (fails), then the damage roll.
+        ScriptedDie die = new ScriptedDie(15, 10, 20, 5, 20, damageRoll);
+        Dragon dragon = new Dragon(die);
+        Messages messages = GetMessages(language);
+
+        Player player = new Player
+        {
+            Name = "TestHero",
+            Agility = 10,
+            HealthPoints = 30,
+            Armor = Armor.MagicalArmor()
+        };
+
+        string result = dragon.Attack(player, messages);
+
+        Assert.AreEqual(30, player.HealthPoints);
+        string absorbed = messages.GetMessage("armor_absorbs_blow");
+        Assert.AreNotEqual("[armor_absorbs_blow]", absorbed);
+        StringAssert.Contains(result, absorbed);
+        Assert.IsFalse(result.Contains(string.Format(messages.GetMessage("dragon_damage_dealt"), dragon.Name, 0)));
+    }
 }
 
 [TestClass]

@@ -93,12 +93,19 @@ public class Dragon
         }
 
         int damage = RollDamage();
+
+        if (player.Armor != null)
+            damage = player.Armor.Absorb(damage);
+
         player.HealthPoints -= damage;
 
         if (player.HealthPoints < 0)
             player.HealthPoints = 0;
 
-        output.Add(string.Format(messages.GetMessage("dragon_damage_dealt"), Name, damage));
+        if (damage == 0 && player.Armor != null)
+            output.Add(messages.GetMessage("armor_absorbs_blow"));
+        else
+            output.Add(string.Format(messages.GetMessage("dragon_damage_dealt"), Name, damage));
         output.Add(string.Format(messages.GetMessage("player_health_now"), player.Name, player.HealthPoints));
 
         if (player.HealthPoints <= 0)
