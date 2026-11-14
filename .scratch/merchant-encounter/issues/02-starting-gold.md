@@ -4,10 +4,10 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] A newly created character has 20 Gold.
-- [ ] The character stats show a Gold line, labelled in English, Spanish, French and Italian.
-- [ ] The combat stats do not show Gold.
-- [ ] The existing "Italian has the same keys as English" test is generalised so every language must have every key English has, and it passes.
-- [ ] All existing tests pass.
+- [x] A newly created character has 20 Gold.
+- [x] The character stats show a Gold line, labelled in English, Spanish, French and Italian.
+- [x] The combat stats do not show Gold.
+- [x] The existing "Italian has the same keys as English" test is generalised so every language must have every key English has, and it passes.
+- [x] All existing tests pass.

@@ -1,5 +1,7 @@
 public class Player
 {
+    public const int StartingGold = 20;
+
     private readonly Die _die = new Die();
 
     public string Name { get; set; } = "";
@@ -9,6 +11,7 @@ public class Player
     public int Strength { get; set; }
     public int Agility { get; set; }
     public int HealthPoints { get; set; }
+    public int Gold { get; set; }
 
     public Weapon? Weapon { get; set; }
 
@@ -23,6 +26,7 @@ public class Player
         int strengthModifier = RollStrength(messages);
         RollAgility(messages);
         RollHealthPoints(messages, strengthModifier);
+        Gold = StartingGold;
 
         PromptForNextAction(messages);
     }
@@ -145,6 +149,7 @@ public class Player
         Console.WriteLine(messages.GetMessage("stats_strength") + Strength);
         Console.WriteLine(messages.GetMessage("stats_agility") + Agility);
         Console.WriteLine(messages.GetMessage("stats_health") + HealthPoints);
+        Console.WriteLine(messages.GetMessage("stats_gold") + Gold);
 
         if (Weapon != null)
         {

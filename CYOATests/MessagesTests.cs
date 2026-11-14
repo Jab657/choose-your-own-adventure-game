@@ -142,22 +142,24 @@ public class MessagesTests
     }
 
     [TestMethod]
-    public void ReadDictionary_ItalianHasSameKeysAsEnglish()
+    public void ReadDictionary_EveryLanguageHasEveryEnglishKey()
     {
-        Messages english = new Messages();
-        english.SetCurrentLanguage("English");
-        english.ReadDictionary();
-
         string jsonPath = Path.Combine(AppContext.BaseDirectory, "language_data.json");
         using System.Text.Json.JsonDocument doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(jsonPath));
-        var englishKeys = doc.RootElement.GetProperty("English").GetProperty("dictionary").EnumerateObject().Select(p => p.Name);
+        var englishKeys = doc.RootElement.GetProperty("English").GetProperty("dictionary").EnumerateObject().Select(p => p.Name).ToList();
+        var languages = doc.RootElement.EnumerateObject().Select(p => p.Name).Where(name => name != "English").ToList();
 
-        Messages italian = new Messages();
-        italian.SetCurrentLanguage("Italian");
-        italian.ReadDictionary();
+        Assert.IsTrue(languages.Count > 0, "No languages other than English were found.");
 
-        foreach (string key in englishKeys)
-            Assert.AreNotEqual($"[{key}]", italian.GetMessage(key), $"Key '{key}' is missing from Italian dictionary.");
+        foreach (string language in languages)
+        {
+            Messages messages = new Messages();
+            messages.SetCurrentLanguage(language);
+            messages.ReadDictionary();
+
+            foreach (string key in englishKeys)
+                Assert.AreNotEqual($"[{key}]", messages.GetMessage(key), $"Key '{key}' is missing from {language} dictionary.");
+        }
     }
 
     [TestMethod]

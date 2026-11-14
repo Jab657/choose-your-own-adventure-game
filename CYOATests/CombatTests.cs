@@ -131,6 +131,21 @@ public class CombatTests
     }
 
     [TestMethod]
+    public void GetCombatStatsDisplay_DoesNotShowGold()
+    {
+        Player player = CreateTestPlayer();
+        player.Gold = 20;
+        Dragon dragon = CreateTestDragon();
+        Messages messages = CreateEnglishMessages();
+
+        Combat combat = new Combat(player, dragon, messages);
+
+        string result = combat.GetCombatStatsDisplay();
+
+        Assert.IsFalse(result.Contains(messages.GetMessage("stats_gold")), "Combat stats should not show Gold.");
+    }
+
+    [TestMethod]
     public void GetCombatStatsDisplay_UsesLocalizedStatLabels()
     {
         Player player = CreateTestPlayer();
