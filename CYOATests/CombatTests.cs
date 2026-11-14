@@ -158,6 +158,22 @@ public class CombatTests
     }
 
     [TestMethod]
+    public void GetCombatStatsDisplay_AfterBuyingMagicalWeapon_ShowsMagicalNameAndNewMaxDamage()
+    {
+        Player player = CreateTestPlayer();
+        player.Occupation = "Magician";
+        player.Gold = 20;
+        player.Weapon = new Weapon("lightning bolt spell", 12, "zap~~~~~~");
+        new Merchant().Purchase(player, MerchantItem.MagicalWeapon);
+        Combat combat = new Combat(player, CreateTestDragon(), CreateEnglishMessages());
+
+        string[] lines = combat.GetCombatStatsDisplay().Split(Environment.NewLine);
+
+        CollectionAssert.Contains(lines, "Weapon: magical lightning bolt spell");
+        CollectionAssert.Contains(lines, "Weapon's Maximum Damage Points: 16");
+    }
+
+    [TestMethod]
     public void GetCombatStatsDisplay_WithoutArmor_ShowsNoArmorLine()
     {
         Messages messages = CreateEnglishMessages();

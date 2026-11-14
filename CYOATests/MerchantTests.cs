@@ -79,6 +79,109 @@ public class MerchantTests
     }
 
     [TestMethod]
+    [DataRow("long sword", 12, "-)=====>", "magical long sword", 16)]
+    [DataRow("lightning bolt spell", 12, "zap~~~~~~", "magical lightning bolt spell", 16)]
+    [DataRow("dagger", 6, "-)==>", "magical dagger", 10)]
+    [DataRow("long bow", 8, "}    -->", "magical long bow", 12)]
+    public void Purchase_MagicalWeapon_TakesTwentyGoldAndEnchantsTheOwnWeapon(
+        string type, int maxDamage, string asciiArt, string magicalType, int enchantedMaxDamage)
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+        Weapon ownWeapon = new Weapon(type, maxDamage, asciiArt);
+        player.Weapon = ownWeapon;
+
+        PurchaseResult result = merchant.Purchase(player, MerchantItem.MagicalWeapon);
+
+        Assert.AreEqual(PurchaseResult.Bought, result);
+        Assert.AreEqual(0, player.Gold);
+        Assert.AreSame(ownWeapon, player.Weapon);
+        Assert.AreEqual(magicalType, player.Weapon!.Type);
+        Assert.AreEqual(enchantedMaxDamage, player.Weapon.MaxDamage);
+        Assert.AreEqual(asciiArt, player.Weapon.AsciiArt);
+        Assert.IsNull(player.Armor);
+        Assert.IsTrue(merchant.HasTraded);
+    }
+
+    [TestMethod]
+    public void Purchase_MagicalWeaponWithLessThanTwentyGold_IsRefusedAndChangesNothing()
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+        player.Gold = 19;
+
+        PurchaseResult result = merchant.Purchase(player, MerchantItem.MagicalWeapon);
+
+        Assert.AreEqual(PurchaseResult.NotEnoughGold, result);
+        Assert.AreEqual(19, player.Gold);
+        Assert.AreEqual("long sword", player.Weapon!.Type);
+        Assert.AreEqual(12, player.Weapon.MaxDamage);
+        Assert.IsFalse(merchant.HasTraded);
+    }
+
+    [TestMethod]
+    [DataRow(MerchantItem.MagicalArmor)]
+    [DataRow(MerchantItem.MagicalWeapon)]
+    public void Purchase_MagicalWeaponAfterAnyPurchase_IsRefusedAsAlreadyTraded(MerchantItem firstPurchase)
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+        player.Gold = 60;
+        merchant.Purchase(player, firstPurchase);
+        int goldAfterFirst = player.Gold;
+        int maxDamageAfterFirst = player.Weapon!.MaxDamage;
+        string typeAfterFirst = player.Weapon.Type;
+
+        PurchaseResult result = merchant.Purchase(player, MerchantItem.MagicalWeapon);
+
+        Assert.AreEqual(PurchaseResult.AlreadyTraded, result);
+        Assert.AreEqual(goldAfterFirst, player.Gold);
+        Assert.AreEqual(maxDamageAfterFirst, player.Weapon.MaxDamage);
+        Assert.AreEqual(typeAfterFirst, player.Weapon.Type);
+    }
+
+    [TestMethod]
+    public void Purchase_MagicalArmorAfterBuyingTheWeapon_IsRefusedAsAlreadyTraded()
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+        player.Gold = 60;
+        merchant.Purchase(player, MerchantItem.MagicalWeapon);
+
+        PurchaseResult result = merchant.Purchase(player, MerchantItem.MagicalArmor);
+
+        Assert.AreEqual(PurchaseResult.AlreadyTraded, result);
+        Assert.AreEqual(40, player.Gold);
+        Assert.IsNull(player.Armor);
+    }
+
+    [TestMethod]
+    public void Purchase_MagicalWeaponWithoutAWeapon_ThrowsWithoutTakingGoldOrMarkingTraded()
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+        player.Weapon = null;
+
+        Assert.ThrowsException<InvalidOperationException>(() => merchant.Purchase(player, MerchantItem.MagicalWeapon));
+
+        Assert.AreEqual(20, player.Gold);
+        Assert.IsFalse(merchant.HasTraded);
+    }
+
+    [TestMethod]
+    public void Purchase_UnknownItem_ThrowsWithoutTakingGoldOrMarkingTraded()
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+
+        Assert.ThrowsException<ArgumentOutOfRangeException>(() => merchant.Purchase(player, (MerchantItem)99));
+
+        Assert.AreEqual(20, player.Gold);
+        Assert.IsNull(player.Armor);
+        Assert.IsFalse(merchant.HasTraded);
+    }
+
+    [TestMethod]
     public void Purchase_AfterAPurchase_IsRefusedAsAlreadyTraded()
     {
         Merchant merchant = new Merchant();
@@ -129,6 +232,53 @@ public class MerchantTests
         Assert.IsTrue(merchant.HasTraded);
         Assert.AreNotEqual("[merchant_bought_armor]", messages.GetMessage("merchant_bought_armor"));
         StringAssert.Contains(output, string.Format(messages.GetMessage("merchant_bought_armor"), 15));
+    }
+
+    [TestMethod]
+    [DataRow("English", "w")]
+    [DataRow("English", "weapon")]
+    [DataRow("English", " WEAPON ")]
+    [DataRow("Spanish", "arma")]
+    [DataRow("French", "arme")]
+    [DataRow("Italian", "arma")]
+    public void Visit_ChooseWeapon_EnchantsWeaponAndEndsVisit(string language, string input)
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+        Messages messages = CreateMessages(language);
+
+        string output = RunWithConsole(input + "\n", () => merchant.Visit(player, messages));
+
+        Assert.AreEqual(0, player.Gold);
+        Assert.AreEqual("magical long sword", player.Weapon!.Type);
+        Assert.AreEqual(16, player.Weapon.MaxDamage);
+        Assert.IsTrue(merchant.HasTraded);
+        string bought = messages.GetMessage("merchant_bought_weapon");
+        Assert.AreNotEqual("[merchant_bought_weapon]", bought);
+        StringAssert.Contains(output, string.Format(bought, 20, messages.TranslateWeaponForDisplay("magical long sword")));
+        Assert.IsFalse(output.Contains(messages.GetMessage("invalid")));
+    }
+
+    [TestMethod]
+    [DataRow("English")]
+    [DataRow("Spanish")]
+    [DataRow("French")]
+    [DataRow("Italian")]
+    public void Visit_ChooseWeaponWithoutEnoughGold_ShowsRefusalThenAllowsArmor(string language)
+    {
+        Merchant merchant = new Merchant();
+        Player player = CreatePlayer();
+        player.Gold = 15;
+        Messages messages = CreateMessages(language);
+
+        string output = RunWithConsole("w\na\n", () => merchant.Visit(player, messages));
+
+        StringAssert.Contains(output, string.Format(messages.GetMessage("merchant_not_enough_gold"), 20, 15));
+        Assert.IsFalse(output.Contains(messages.GetMessage("invalid")));
+        Assert.AreEqual("long sword", player.Weapon!.Type);
+        Assert.AreEqual(0, player.Gold);
+        Assert.IsNotNull(player.Armor);
+        Assert.IsTrue(merchant.HasTraded);
     }
 
     [TestMethod]

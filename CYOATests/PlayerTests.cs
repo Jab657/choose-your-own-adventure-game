@@ -97,6 +97,46 @@ public class PlayerTests
 
     [TestMethod]
     [DoNotParallelize]
+    [DataRow("English", "Weapon: magical dagger", "Weapon's Maximum Damage Points: 10")]
+    [DataRow("Spanish", "Arma: daga magica", "Puntos Maximos de Dano del Arma: 10")]
+    [DataRow("French", "Arme: dague magique", "Points de Dommages Maximum: 10")]
+    [DataRow("Italian", "Arma: pugnale magico", "Danno Massimo dell'Arma: 10")]
+    public void DisplayStats_AfterBuyingMagicalWeapon_ShowsMagicalNameAndNewMaxDamage(string language, string weaponLine, string damageLine)
+    {
+        Messages messages = CreateMessages(language);
+        Player player = new Player { Name = "Aria", Race = "Halfling", Occupation = "Thief", Gold = 20,
+                                     Weapon = new Weapon("dagger", 6, "-)==>") };
+        new Merchant().Purchase(player, MerchantItem.MagicalWeapon);
+
+        string output = RunWithConsole("", () => player.DisplayStats(messages));
+
+        string[] lines = output.Split(Environment.NewLine);
+        CollectionAssert.Contains(lines, weaponLine);
+        CollectionAssert.Contains(lines, damageLine);
+    }
+
+    [TestMethod]
+    [DataRow("English", "As a Archer, you withdraw your magical long bow and attack the dragon.")]
+    [DataRow("Spanish", "Como Arquero, sacas tu arco largo magico y atacas al dragon.")]
+    [DataRow("French", "En tant que Archer, vous sortez votre arc long magique et attaquez le dragon.")]
+    [DataRow("Italian", "Come Arciere, estrai il tuo arco lungo magico e attacchi il drago.")]
+    public void Attack_AfterBuyingMagicalWeapon_NamesTheMagicalWeapon(string language, string expectedIntro)
+    {
+        Messages messages = CreateMessages(language);
+        Player player = new Player { Name = "Aria", Race = "Elf", Occupation = "Archer", Strength = 10, Gold = 20,
+                                     Weapon = new Weapon("long bow", 8, "}    -->") };
+        new Merchant().Purchase(player, MerchantItem.MagicalWeapon);
+        Dragon dragon = new Dragon(new Die()) { Name = "Smolderfang", Agility = 10, HealthPoints = 30,
+                                                Weapon = new Weapon("claws", 12, "<<< claws >>>") };
+
+        string output = player.Attack(dragon, messages);
+
+        Assert.AreEqual(expectedIntro, output.Split(Environment.NewLine)[0]);
+        Assert.AreEqual("}    -->", output.Split(Environment.NewLine)[1]);
+    }
+
+    [TestMethod]
+    [DoNotParallelize]
     public void DisplayStats_WithoutArmor_ShowsNoArmorLine()
     {
         Messages messages = CreateMessages("English");

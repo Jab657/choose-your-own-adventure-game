@@ -163,6 +163,53 @@ public class MessagesTests
     }
 
     [TestMethod]
+    [DataRow("English", "magical long sword", "magical long sword")]
+    [DataRow("English", "magical lightning bolt spell", "magical lightning bolt spell")]
+    [DataRow("English", "magical dagger", "magical dagger")]
+    [DataRow("English", "magical long bow", "magical long bow")]
+    [DataRow("Spanish", "magical long sword", "espada larga magica")]
+    [DataRow("Spanish", "magical lightning bolt spell", "hechizo magico de rayo")]
+    [DataRow("Spanish", "magical dagger", "daga magica")]
+    [DataRow("Spanish", "magical long bow", "arco largo magico")]
+    [DataRow("French", "magical long sword", "epee longue magique")]
+    [DataRow("French", "magical lightning bolt spell", "sort magique d'eclair")]
+    [DataRow("French", "magical dagger", "dague magique")]
+    [DataRow("French", "magical long bow", "arc long magique")]
+    [DataRow("Italian", "magical long sword", "spada lunga magica")]
+    [DataRow("Italian", "magical lightning bolt spell", "incantesimo magico del fulmine")]
+    [DataRow("Italian", "magical dagger", "pugnale magico")]
+    [DataRow("Italian", "magical long bow", "arco lungo magico")]
+    public void TranslateWeaponForDisplay_MagicalWeapon_HasFullNameInEachLanguage(string language, string magicalType, string expected)
+    {
+        Messages messages = new Messages();
+        messages.SetCurrentLanguage(language);
+        messages.ReadDictionary();
+
+        Assert.AreEqual(expected, messages.TranslateWeaponForDisplay(magicalType));
+    }
+
+    [TestMethod]
+    public void ReadDictionary_EveryLanguageNamesEveryMagicalWeapon()
+    {
+        string[] magicalTypes = { "magical long sword", "magical lightning bolt spell", "magical dagger", "magical long bow" };
+        string jsonPath = Path.Combine(AppContext.BaseDirectory, "language_data.json");
+        using System.Text.Json.JsonDocument doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(jsonPath));
+
+        foreach (System.Text.Json.JsonProperty language in doc.RootElement.EnumerateObject())
+        {
+            System.Text.Json.JsonElement weaponMap = language.Value.GetProperty("displayWeaponMap");
+            foreach (string magicalType in magicalTypes)
+            {
+                Assert.IsTrue(weaponMap.TryGetProperty(magicalType, out System.Text.Json.JsonElement name),
+                    $"'{magicalType}' is missing from the {language.Name} weapon display map.");
+                string? value = name.GetString();
+                Assert.IsFalse(string.IsNullOrWhiteSpace(value), $"'{magicalType}' is empty in {language.Name}.");
+                Assert.IsFalse(value!.Contains('{'), $"'{magicalType}' in {language.Name} is a placeholder pattern: '{value}'.");
+            }
+        }
+    }
+
+    [TestMethod]
     public void ItalianRaceAndOccupationInputsNormalizeToCanonical()
     {
         Messages messages = new Messages();
