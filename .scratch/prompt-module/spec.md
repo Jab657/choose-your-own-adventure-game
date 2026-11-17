@@ -123,11 +123,12 @@ For the player, everything looks and behaves exactly as it does today, with one 
   This follows ADR-0001: every language complete, no accented characters.
 - **Combat fix**: an invalid answer at the combat prompt prints the invalid message and asks again, with no extra attack round. It is fixed on the current code before the refactor, so the refactor itself changes nothing the player sees.
 - **Game clean-up**: the three unused validation methods (menu, path and combat choice) are deleted.
-- **Delivery order**:
+- **Delivery order** (expand, migrate in two batches, contract as each batch lands):
   1. the combat fix;
-  2. the Prompt module plus the four prompts that offer the Inventory;
-  3. the remaining prompts and the deletion of the old text-module methods;
-  4. the deletion of the unused game validation methods.
+  2. one loader for every language map, plus the single choice lookup and the extended coverage test (a prefactor with no visible change);
+  3. the Prompt module plus the four prompts that offer the Inventory, deleting the text-module methods they no longer need;
+  4. the remaining prompts, deleting the rest of the old text-module methods (after 1 and 3);
+  5. the deletion of the unused game validation methods (independent).
 
 ## Testing Decisions
 
