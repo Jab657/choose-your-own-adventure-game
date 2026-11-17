@@ -137,13 +137,34 @@ public class PlayerTests
 
     [TestMethod]
     [DoNotParallelize]
-    public void DisplayStats_WithoutArmor_ShowsNoArmorLine()
+    [DataRow("English", "Armor: Leather Armor (absorbs 0 damage)")]
+    [DataRow("Spanish", "Armadura: Armadura de Cuero (absorbe 0 de dano)")]
+    [DataRow("French", "Armure: Armure de Cuir (absorbe 0 degats)")]
+    [DataRow("Italian", "Armatura: Armatura di Cuoio (assorbe 0 danni)")]
+    public void DisplayStats_ForNewPlayer_ShowsLeatherArmorLine(string language, string expectedLine)
     {
-        Messages messages = CreateMessages("English");
+        Messages messages = CreateMessages(language);
         Player player = new Player { Name = "Aria", Race = "Human", Occupation = "Fighter" };
 
         string output = RunWithConsole("", () => player.DisplayStats(messages));
 
-        Assert.IsFalse(output.Contains(messages.GetMessage("stats_armor")));
+        CollectionAssert.Contains(output.Split(Environment.NewLine), expectedLine);
+    }
+
+    [TestMethod]
+    [DoNotParallelize]
+    [Timeout(5000)]
+    public void WholeGame_ListingStatsAfterCharacterCreation_ShowsCharacterSummaryWithLeatherArmor()
+    {
+        // English, new game, Human "Hero" Fighter, three rolls, then "1" to list stats and "2" to proceed.
+        // Input then ends at the path prompt, which stops the game cleanly.
+        string input = "1\n1\nHuman\nHero\nFighter\nroll\nroll\nroll\n1\n2\n";
+
+        string output = RunWithConsole(input, () => new Game().StartGame());
+
+        string[] lines = output.Split(Environment.NewLine);
+        CollectionAssert.Contains(lines, "Armor: Leather Armor (absorbs 0 damage)");
+        CollectionAssert.Contains(lines, "Weapon: long sword");
+        CollectionAssert.Contains(lines, "Gold: 20");
     }
 }

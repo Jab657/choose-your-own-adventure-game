@@ -94,15 +94,14 @@ public class Dragon
 
         int damage = RollDamage();
 
-        if (player.Armor != null)
-            damage = player.Armor.Absorb(damage);
+        damage = player.Armor.Absorb(damage);
 
         player.HealthPoints -= damage;
 
         if (player.HealthPoints < 0)
             player.HealthPoints = 0;
 
-        if (damage == 0 && player.Armor != null)
+        if (damage == 0)
             output.Add(messages.GetMessage("armor_absorbs_blow"));
         else
             output.Add(string.Format(messages.GetMessage("dragon_damage_dealt"), Name, damage));

@@ -113,6 +113,18 @@ public class Messages
         return _displayWeaponMap.TryGetValue(weaponType, out string? translated) ? translated : weaponType;
     }
 
+    // The armor's translated name and absorption, e.g. "Leather Armor (absorbs 0 damage)".
+    public string TranslateArmorForDisplay(Armor armor)
+    {
+        string key = armor.Kind switch
+        {
+            ArmorKind.Leather => "leather_armor_display",
+            ArmorKind.Magical => "magical_armor_display",
+            _ => throw new ArgumentOutOfRangeException(nameof(armor), armor.Kind, "Unknown armor kind.")
+        };
+        return string.Format(GetMessage(key), armor.Absorption);
+    }
+
     // Returns "armor", "weapon" or "leave" for a Merchant menu input in the current language, or null if invalid.
     public string? NormalizeMerchantChoice(string? input)
     {

@@ -14,7 +14,7 @@ public class Player
     public int Gold { get; set; }
 
     public Weapon? Weapon { get; set; }
-    public Armor? Armor { get; set; }
+    public Armor Armor { get; set; } = Armor.LeatherArmor();
 
     public void CreateCharacter(Messages messages)
     {
@@ -158,8 +158,7 @@ public class Player
             Console.WriteLine(messages.GetMessage("stats_damage") + Weapon.MaxDamage);
         }
 
-        if (Armor != null)
-            Console.WriteLine(messages.GetMessage("stats_armor") + string.Format(messages.GetMessage("magical_armor_display"), Armor.Absorption));
+        Console.WriteLine(messages.GetMessage("stats_armor") + messages.TranslateArmorForDisplay(Armor));
     }
 
     public int RollAttack()

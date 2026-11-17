@@ -146,10 +146,11 @@ public class CombatTests
     }
 
     [TestMethod]
-    public void GetCombatStatsDisplay_WithArmor_ShowsArmorLine()
+    public void GetCombatStatsDisplay_AfterBuyingMagicalArmor_ShowsMagicalArmorLine()
     {
         Player player = CreateTestPlayer();
-        player.Armor = Armor.MagicalArmor();
+        player.Gold = 20;
+        new Merchant().Purchase(player, MerchantItem.MagicalArmor);
         Combat combat = new Combat(player, CreateTestDragon(), CreateEnglishMessages());
 
         string result = combat.GetCombatStatsDisplay();
@@ -174,14 +175,13 @@ public class CombatTests
     }
 
     [TestMethod]
-    public void GetCombatStatsDisplay_WithoutArmor_ShowsNoArmorLine()
+    public void GetCombatStatsDisplay_ForNewPlayer_ShowsLeatherArmorLine()
     {
-        Messages messages = CreateEnglishMessages();
-        Combat combat = new Combat(CreateTestPlayer(), CreateTestDragon(), messages);
+        Combat combat = new Combat(CreateTestPlayer(), CreateTestDragon(), CreateEnglishMessages());
 
         string result = combat.GetCombatStatsDisplay();
 
-        Assert.IsFalse(result.Contains(messages.GetMessage("stats_armor")));
+        CollectionAssert.Contains(result.Split(Environment.NewLine), "Armor: Leather Armor (absorbs 0 damage)");
     }
 
     [TestMethod]

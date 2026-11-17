@@ -58,7 +58,7 @@ public class MerchantTests
 
         Assert.AreEqual(PurchaseResult.Bought, result);
         Assert.AreEqual(5, player.Gold);
-        Assert.IsNotNull(player.Armor);
+        Assert.AreEqual(ArmorKind.Magical, player.Armor.Kind);
         Assert.AreEqual(3, player.Armor.Absorption);
         Assert.IsTrue(merchant.HasTraded);
     }
@@ -74,7 +74,7 @@ public class MerchantTests
 
         Assert.AreEqual(PurchaseResult.NotEnoughGold, result);
         Assert.AreEqual(14, player.Gold);
-        Assert.IsNull(player.Armor);
+        Assert.AreEqual(ArmorKind.Leather, player.Armor.Kind);
         Assert.IsFalse(merchant.HasTraded);
     }
 
@@ -99,7 +99,7 @@ public class MerchantTests
         Assert.AreEqual(magicalType, player.Weapon!.Type);
         Assert.AreEqual(enchantedMaxDamage, player.Weapon.MaxDamage);
         Assert.AreEqual(asciiArt, player.Weapon.AsciiArt);
-        Assert.IsNull(player.Armor);
+        Assert.AreEqual(ArmorKind.Leather, player.Armor.Kind);
         Assert.IsTrue(merchant.HasTraded);
     }
 
@@ -152,7 +152,7 @@ public class MerchantTests
 
         Assert.AreEqual(PurchaseResult.AlreadyTraded, result);
         Assert.AreEqual(40, player.Gold);
-        Assert.IsNull(player.Armor);
+        Assert.AreEqual(ArmorKind.Leather, player.Armor.Kind);
     }
 
     [TestMethod]
@@ -177,7 +177,7 @@ public class MerchantTests
         Assert.ThrowsException<ArgumentOutOfRangeException>(() => merchant.Purchase(player, (MerchantItem)99));
 
         Assert.AreEqual(20, player.Gold);
-        Assert.IsNull(player.Armor);
+        Assert.AreEqual(ArmorKind.Leather, player.Armor.Kind);
         Assert.IsFalse(merchant.HasTraded);
     }
 
@@ -188,7 +188,7 @@ public class MerchantTests
         Player player = CreatePlayer();
         player.Gold = 40;
         merchant.Purchase(player, MerchantItem.MagicalArmor);
-        Armor firstArmor = player.Armor!;
+        Armor firstArmor = player.Armor;
 
         PurchaseResult result = merchant.Purchase(player, MerchantItem.MagicalArmor);
 
@@ -228,7 +228,7 @@ public class MerchantTests
         string output = RunWithConsole(input + "\n", () => merchant.Visit(player, messages));
 
         Assert.AreEqual(5, player.Gold);
-        Assert.IsNotNull(player.Armor);
+        Assert.AreEqual(ArmorKind.Magical, player.Armor.Kind);
         Assert.IsTrue(merchant.HasTraded);
         Assert.AreNotEqual("[merchant_bought_armor]", messages.GetMessage("merchant_bought_armor"));
         StringAssert.Contains(output, string.Format(messages.GetMessage("merchant_bought_armor"), 15));
@@ -277,7 +277,7 @@ public class MerchantTests
         Assert.IsFalse(output.Contains(messages.GetMessage("invalid")));
         Assert.AreEqual("long sword", player.Weapon!.Type);
         Assert.AreEqual(0, player.Gold);
-        Assert.IsNotNull(player.Armor);
+        Assert.AreEqual(ArmorKind.Magical, player.Armor.Kind);
         Assert.IsTrue(merchant.HasTraded);
     }
 
@@ -302,7 +302,7 @@ public class MerchantTests
         Assert.AreEqual(2, promptCount);
         Assert.IsFalse(output.Contains(messages.GetMessage("invalid")));
         Assert.AreEqual(10, player.Gold);
-        Assert.IsNull(player.Armor);
+        Assert.AreEqual(ArmorKind.Leather, player.Armor.Kind);
         StringAssert.Contains(output, messages.GetMessage("merchant_leave"));
     }
 
