@@ -171,8 +171,16 @@ public class Game
         while (true)
         {
             Console.WriteLine(messages.GetMessage("dragon_encounter_prompt"));
+            Console.WriteLine(messages.GetMessage("inventory_hint"));
             Console.Write(messages.GetMessage("enter_choice"));
             string input = ConsoleInput.ReadLine().Trim().ToLower();
+
+            // Checking the Inventory is free: show it, then the same prompt again.
+            if (messages.IsInventoryCommand(input))
+            {
+                player.DisplayInventory(messages);
+                continue;
+            }
 
             if (input == "a" || input == "attack")
             {

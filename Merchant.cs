@@ -73,8 +73,18 @@ public class Merchant
         while (true)
         {
             Console.WriteLine(messages.GetMessage("merchant_prompt"));
+            Console.WriteLine(messages.GetMessage("inventory_hint"));
             Console.Write(messages.GetMessage("enter_choice"));
-            string? choice = messages.NormalizeMerchantChoice(ConsoleInput.ReadLine());
+            string input = ConsoleInput.ReadLine();
+
+            // Checking the Inventory is free: show it, then the same prompt again.
+            if (messages.IsInventoryCommand(input))
+            {
+                player.DisplayInventory(messages);
+                continue;
+            }
+
+            string? choice = messages.NormalizeMerchantChoice(input);
 
             MerchantItem? item = choice switch
             {

@@ -75,8 +75,18 @@ public class Shrine
         while (true)
         {
             Console.WriteLine(messages.GetMessage("shrine_prompt"));
+            Console.WriteLine(messages.GetMessage("inventory_hint"));
             Console.Write(messages.GetMessage("enter_choice"));
-            ShrineChoice? choice = messages.NormalizeShrineChoice(ConsoleInput.ReadLine());
+            string input = ConsoleInput.ReadLine();
+
+            // Checking the Inventory is free: show it, then the same prompt again.
+            if (messages.IsInventoryCommand(input))
+            {
+                player.DisplayInventory(messages);
+                continue;
+            }
+
+            ShrineChoice? choice = messages.NormalizeShrineChoice(input);
 
             if (choice == ShrineChoice.Offer)
             {
