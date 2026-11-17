@@ -11,7 +11,7 @@
 - [ ] `pathChoiceMap` (`north`/`n`/`south`/`s`/`exit`/`e`) and `dragonChoiceMap` (`attack`/`a`/`retreat`/`r`) added to English, Spanish, French and Italian with the same English words and canonical values.
 - [ ] `Game` creates one Prompt after language selection. Path and dragon prompts use it; `PromptForPath`'s loop is gone.
 - [ ] `Merchant.Visit` and `Shrine.Visit` take the Prompt and use it, looping themselves on "not enough Gold". Merchant converts the canonical string to `MerchantItem`, Shrine to `ShrineChoice`.
-- [ ] `IsInventoryCommand`, `NormalizeMerchantChoice` and `NormalizeShrineChoice` are deleted; their tests are rewritten against the choice lookup.
+- [ ] `IsInventoryCommand`, `NormalizeMerchantChoice` and `NormalizeShrineChoice` are deleted. Their test cases (including translated answers) move up to `PromptTests`; the choice lookup is tested only through Prompt.
 - [ ] Call sites use named arguments.
 - [ ] Tests:
   - new `PromptTests` covering every Prompt case listed in the spec's Testing Decisions.

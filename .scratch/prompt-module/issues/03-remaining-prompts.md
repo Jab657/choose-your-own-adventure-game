@@ -10,6 +10,6 @@
 - [ ] `Player.CreateCharacter` takes the Prompt; race, occupation, the three rolls and the next-action menu use it. `PromptForRace`, `PromptForOccupation` and `PromptRoll` loops are gone; the next-action caller loops on "1. List stats". `PromptForName` is unchanged.
 - [ ] The main menu uses Prompt with `answerOnSameLine: true`.
 - [ ] `Combat` takes the Prompt for its attack/retreat prompt; ticket 01's behaviour is kept.
-- [ ] `IsValidRace`, `NormalizeRace`, `IsValidOccupation` and `NormalizeOccupation` are deleted; their tests are rewritten against the choice lookup.
+- [ ] `IsValidRace`, `NormalizeRace`, `IsValidOccupation` and `NormalizeOccupation` are deleted. Their test cases (including translated race and occupation words) move up to `PromptTests`.
 - [ ] Call sites use named arguments.
 - [ ] Existing whole-game, Player, Combat and Messages tests pass with only setup changes; the extended key-coverage test covers the new maps.
