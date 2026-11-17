@@ -75,6 +75,84 @@ public class ShrineTests
     }
 
     [TestMethod]
+    [DataRow("English", "o")]
+    [DataRow("English", "offer")]
+    [DataRow("English", "  O  ")]
+    [DataRow("English", " Offer\t")]
+    [DataRow("Spanish", "ofrecer")]
+    [DataRow("French", "OFFRIR")]
+    [DataRow("Italian", "offrire")]
+    public void Visit_Offer_MakesOfferingAndShowsNewHealthPointsAndGold(string language, string input)
+    {
+        Shrine shrine = new Shrine(new ScriptedDie());
+        Player player = CreatePlayer();
+        Messages messages = CreateMessages(language);
+
+        string output = RunWithConsole(input + "\n", () => shrine.Visit(player, messages));
+
+        foreach (string key in new[] { "shrine_offering_made", "shrine_health_now", "shrine_gold_now" })
+            Assert.AreNotEqual($"[{key}]", messages.GetMessage(key), $"'{key}' is missing in {language}.");
+
+        StringAssert.Contains(output, string.Format(messages.GetMessage("shrine_offering_made"), 5));
+        StringAssert.Contains(output, string.Format(messages.GetMessage("shrine_health_now"), 25));
+        StringAssert.Contains(output, string.Format(messages.GetMessage("shrine_gold_now"), 15));
+        Assert.IsFalse(output.Contains(messages.GetMessage("invalid")));
+        Assert.IsFalse(output.Contains(messages.GetMessage("shrine_leave")));
+        Assert.AreEqual(25, player.HealthPoints);
+        Assert.AreEqual(15, player.Gold);
+    }
+
+    [TestMethod]
+    public void Visit_EnglishOffer_PrintsOutcomeThenHealthPointsThenGold()
+    {
+        Messages messages = CreateMessages("English");
+
+        string output = RunWithConsole("o\n", () => new Shrine(new ScriptedDie()).Visit(CreatePlayer(), messages));
+
+        int outcome = output.IndexOf("You lay 5 Gold at the foot of the Shrine.");
+        int health = output.IndexOf("You now have 25 Health Points.");
+        int gold = output.IndexOf("You have 15 Gold left.");
+        Assert.IsTrue(outcome >= 0 && outcome < health && health < gold, output);
+    }
+
+    [TestMethod]
+    [DataRow("English")]
+    [DataRow("Spanish")]
+    [DataRow("French")]
+    [DataRow("Italian")]
+    public void Visit_UnaffordableOfferingThenLeave_RefusesAsksAgainAndWalksPastUnchanged(string language)
+    {
+        Shrine shrine = new Shrine(new ScriptedDie());
+        Player player = CreatePlayer();
+        player.Gold = 0; // spent on the Magical Weapon
+        Messages messages = CreateMessages(language);
+
+        string output = RunWithConsole("o\nl\n", () => shrine.Visit(player, messages));
+
+        Assert.AreNotEqual("[shrine_not_enough_gold]", messages.GetMessage("shrine_not_enough_gold"), $"Missing in {language}.");
+        StringAssert.Contains(output, string.Format(messages.GetMessage("shrine_not_enough_gold"), 5, 0));
+        int promptCount = output.Split(messages.GetMessage("shrine_prompt")).Length - 1;
+        Assert.AreEqual(2, promptCount);
+        Assert.IsFalse(output.Contains(string.Format(messages.GetMessage("shrine_offering_made"), 5)));
+        Assert.IsFalse(output.Contains(messages.GetMessage("invalid")));
+        StringAssert.Contains(output, messages.GetMessage("shrine_leave"));
+        Assert.AreEqual(0, player.Gold);
+        Assert.AreEqual(20, player.HealthPoints);
+    }
+
+    [TestMethod]
+    public void Visit_EnglishUnaffordableOffering_ShowsCostAndCurrentGold()
+    {
+        Player player = CreatePlayer();
+        player.Gold = 3;
+
+        string output = RunWithConsole("o\nl\n",
+            () => new Shrine(new ScriptedDie()).Visit(player, CreateMessages("English")));
+
+        StringAssert.Contains(output, "The offering costs 5 Gold, and you have only 3.");
+    }
+
+    [TestMethod]
     public void Visit_EnglishPrompt_ListsOfferPrayAndLeaveCodes()
     {
         Messages messages = CreateMessages("English");
@@ -125,5 +203,50 @@ public class ShrineTests
         Assert.AreEqual(ShrineResult.WalkedPast, result);
         Assert.AreEqual(20, player.HealthPoints);
         Assert.AreEqual(20, player.Gold);
+    }
+
+    [TestMethod]
+    public void Choose_OfferWithEnoughGold_TakesFiveGoldAndRestoresFiveHealthPoints()
+    {
+        // No rolls are scripted: an offering must not roll the die.
+        Shrine shrine = new Shrine(new ScriptedDie());
+        Player player = CreatePlayer();
+
+        ShrineResult result = shrine.Choose(player, ShrineChoice.Offer);
+
+        Assert.AreEqual(ShrineResult.OfferingMade, result);
+        Assert.AreEqual(15, player.Gold);
+        // 20 + 5 = 25: above the starting Health Points, since healing has no upper cap.
+        Assert.AreEqual(25, player.HealthPoints);
+    }
+
+    [TestMethod]
+    public void Choose_OfferWithExactlyFiveGold_SucceedsAndLeavesNoGold()
+    {
+        Shrine shrine = new Shrine(new ScriptedDie());
+        Player player = CreatePlayer();
+        player.Gold = 5;
+
+        ShrineResult result = shrine.Choose(player, ShrineChoice.Offer);
+
+        Assert.AreEqual(ShrineResult.OfferingMade, result);
+        Assert.AreEqual(0, player.Gold);
+        Assert.AreEqual(25, player.HealthPoints);
+    }
+
+    [TestMethod]
+    [DataRow(0)] // after buying the Magical Weapon
+    [DataRow(4)]
+    public void Choose_OfferWithLessThanFiveGold_ReturnsNotEnoughGoldAndLeavesPlayerUnchanged(int gold)
+    {
+        Shrine shrine = new Shrine(new ScriptedDie());
+        Player player = CreatePlayer();
+        player.Gold = gold;
+
+        ShrineResult result = shrine.Choose(player, ShrineChoice.Offer);
+
+        Assert.AreEqual(ShrineResult.NotEnoughGold, result);
+        Assert.AreEqual(gold, player.Gold);
+        Assert.AreEqual(20, player.HealthPoints);
     }
 }

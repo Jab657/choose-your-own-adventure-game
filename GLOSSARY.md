@@ -25,5 +25,5 @@ The Detour on the North path: an old mountain shrine where the player can make a
 _Avoid_: Altar, temple
 
 **Gold**:
-The player's currency: a fixed amount every character starts with, spent only at the Merchant.
+The player's currency: a fixed amount every character starts with, spent at the Merchant or as an offering at the Shrine.
 _Avoid_: Money, coins, currency
