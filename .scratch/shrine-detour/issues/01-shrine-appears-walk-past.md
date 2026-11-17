@@ -4,20 +4,20 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] A new Shrine module, modelled on the Merchant, receives a die when it is created and has:
+- [x] A new Shrine module, modelled on the Merchant, receives a die when it is created and has:
   - a choose operation that takes the player and a Shrine choice (Offer, Pray, Leave) and returns a result without writing to the console. Leave returns a walked-past result and leaves the player unchanged.
   - a visit operation that runs the console scene.
-- [ ] The North narrative is split: the existing message now describes only the journey, and a new dragon-arrival message carries the "confronted with a dragon, hoard of gold behind it" text. This is done in English, Spanish, French and Italian.
-- [ ] The North branch of the game runs, in order: journey text → Shrine visit → dragon arrival → existing dragon introduction, stats and prompt. It uses the game's die for the Shrine.
-- [ ] The Shrine shows its description and an options prompt listing `o` (offer), `p` (pray) and `l` (leave).
-- [ ] `l` and the full leave word are accepted in every language, case-insensitive and trimmed, through a new per-language Shrine choice map loaded by messages. The map already contains the offer and pray words for all four languages.
-- [ ] Walking past prints a short leaving line and the player continues to the dragon.
-- [ ] Invalid input prints the existing invalid-choice message and asks again.
-- [ ] If input ends at the Shrine prompt, the game stops cleanly instead of looping (existing end-of-input behaviour).
-- [ ] All new keys exist in all four languages with no accented characters (ADR-0001), and the existing same-keys-as-English test passes.
-- [ ] Tests:
+- [x] The North narrative is split: the existing message now describes only the journey, and a new dragon-arrival message carries the "confronted with a dragon, hoard of gold behind it" text. This is done in English, Spanish, French and Italian.
+- [x] The North branch of the game runs, in order: journey text → Shrine visit → dragon arrival → existing dragon introduction, stats and prompt. It uses the game's die for the Shrine.
+- [x] The Shrine shows its description and an options prompt listing `o` (offer), `p` (pray) and `l` (leave).
+- [x] `l` and the full leave word are accepted in every language, case-insensitive and trimmed, through a new per-language Shrine choice map loaded by messages. The map already contains the offer and pray words for all four languages.
+- [x] Walking past prints a short leaving line and the player continues to the dragon.
+- [x] Invalid input prints the existing invalid-choice message and asks again.
+- [x] If input ends at the Shrine prompt, the game stops cleanly instead of looping (existing end-of-input behaviour).
+- [x] All new keys exist in all four languages with no accented characters (ADR-0001), and the existing same-keys-as-English test passes.
+- [x] Tests:
   - choose with Leave leaves the player unchanged.
   - visit accepts `l`, `leave`, a translated leave word, and mixed case or padded input.
   - visit handles invalid input followed by leave.
