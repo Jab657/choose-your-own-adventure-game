@@ -103,6 +103,65 @@ public class ShrineTests
     }
 
     [TestMethod]
+    [DataRow("English", "p")]
+    [DataRow("English", "pray")]
+    [DataRow("English", "  P  ")]
+    [DataRow("English", " Pray\t")]
+    [DataRow("Spanish", "rezar")]
+    [DataRow("French", "PRIER")]
+    [DataRow("Italian", "pregare")]
+    public void Visit_PrayAnswered_ShowsAnsweredOutcomeAndNewHealthPoints(string language, string input)
+    {
+        Shrine shrine = new Shrine(new ScriptedDie(4));
+        Player player = CreatePlayer();
+        Messages messages = CreateMessages(language);
+
+        string output = RunWithConsole(input + "\n", () => shrine.Visit(player, messages));
+
+        Assert.AreNotEqual("[shrine_prayer_answered]", messages.GetMessage("shrine_prayer_answered"), $"Missing in {language}.");
+        StringAssert.Contains(output, messages.GetMessage("shrine_prayer_answered"));
+        StringAssert.Contains(output, string.Format(messages.GetMessage("shrine_health_now"), 22));
+        Assert.IsFalse(output.Contains(messages.GetMessage("invalid")));
+        Assert.IsFalse(output.Contains(messages.GetMessage("shrine_leave")));
+        Assert.AreEqual(22, player.HealthPoints);
+        Assert.AreEqual(20, player.Gold);
+    }
+
+    [TestMethod]
+    [DataRow("English", "p")]
+    [DataRow("English", " PRAY ")]
+    [DataRow("Spanish", "Rezar")]
+    [DataRow("French", "prier")]
+    [DataRow("Italian", "PREGARE")]
+    public void Visit_PrayDispleased_ShowsDispleasedOutcomeAndNewHealthPoints(string language, string input)
+    {
+        Shrine shrine = new Shrine(new ScriptedDie(2));
+        Player player = CreatePlayer();
+        Messages messages = CreateMessages(language);
+
+        string output = RunWithConsole(input + "\n", () => shrine.Visit(player, messages));
+
+        Assert.AreNotEqual("[shrine_prayer_displeased]", messages.GetMessage("shrine_prayer_displeased"), $"Missing in {language}.");
+        StringAssert.Contains(output, messages.GetMessage("shrine_prayer_displeased"));
+        Assert.IsFalse(output.Contains(messages.GetMessage("shrine_prayer_answered")));
+        StringAssert.Contains(output, string.Format(messages.GetMessage("shrine_health_now"), 18));
+        Assert.IsFalse(output.Contains(messages.GetMessage("invalid")));
+        Assert.AreEqual(18, player.HealthPoints);
+        Assert.AreEqual(20, player.Gold);
+    }
+
+    [TestMethod]
+    public void Visit_EnglishPray_PrintsOutcomeThenHealthPoints()
+    {
+        string output = RunWithConsole("p\n",
+            () => new Shrine(new ScriptedDie(6)).Visit(CreatePlayer(), CreateMessages("English")));
+
+        int outcome = output.IndexOf("Your prayer is answered.");
+        int health = output.IndexOf("You now have 22 Health Points.");
+        Assert.IsTrue(outcome >= 0 && outcome < health, output);
+    }
+
+    [TestMethod]
     public void Visit_EnglishOffer_PrintsOutcomeThenHealthPointsThenGold()
     {
         Messages messages = CreateMessages("English");
@@ -232,6 +291,52 @@ public class ShrineTests
         Assert.AreEqual(ShrineResult.OfferingMade, result);
         Assert.AreEqual(0, player.Gold);
         Assert.AreEqual(25, player.HealthPoints);
+    }
+
+    [TestMethod]
+    [DataRow(3)]
+    [DataRow(6)]
+    public void Choose_PrayWithRollOfThreeOrMore_AnswersPrayerAndAddsTwoHealthPoints(int roll)
+    {
+        Shrine shrine = new Shrine(new ScriptedDie(roll));
+        Player player = CreatePlayer();
+
+        ShrineResult result = shrine.Choose(player, ShrineChoice.Pray);
+
+        Assert.AreEqual(ShrineResult.PrayerAnswered, result);
+        // 20 + 2 = 22: above the starting Health Points, since healing has no upper cap.
+        Assert.AreEqual(22, player.HealthPoints);
+        Assert.AreEqual(20, player.Gold);
+    }
+
+    [TestMethod]
+    [DataRow(1)]
+    [DataRow(2)]
+    public void Choose_PrayWithRollOfOneOrTwo_DispleasesSpiritsAndTakesTwoHealthPoints(int roll)
+    {
+        Shrine shrine = new Shrine(new ScriptedDie(roll));
+        Player player = CreatePlayer();
+
+        ShrineResult result = shrine.Choose(player, ShrineChoice.Pray);
+
+        Assert.AreEqual(ShrineResult.PrayerDispleased, result);
+        Assert.AreEqual(18, player.HealthPoints);
+        Assert.AreEqual(20, player.Gold);
+    }
+
+    [TestMethod]
+    [DataRow(1)]
+    [DataRow(2)]
+    public void Choose_DispleasingPrayerAtLowHealthPoints_NeverDropsBelowOne(int healthPoints)
+    {
+        Shrine shrine = new Shrine(new ScriptedDie(1));
+        Player player = CreatePlayer();
+        player.HealthPoints = healthPoints;
+
+        ShrineResult result = shrine.Choose(player, ShrineChoice.Pray);
+
+        Assert.AreEqual(ShrineResult.PrayerDispleased, result);
+        Assert.AreEqual(1, player.HealthPoints);
     }
 
     [TestMethod]
