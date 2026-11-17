@@ -291,7 +291,7 @@ public class GamePbi18Tests
 
         string output = writer.ToString();
 
-        StringAssert.Contains(output, messages.GetMessage("north_path_narrative"));
+        StringAssert.Contains(output, messages.GetMessage("dragon_arrival"));
         StringAssert.Contains(output, string.Format(messages.GetMessage("dragon_intro"), dragon.Name));
         StringAssert.Contains(output, messages.GetMessage("dragon_stats_intro"));
         StringAssert.Contains(output, messages.GetMessage("dragon_encounter_prompt"));
@@ -305,6 +305,7 @@ public class GamePbi18Tests
         messages.ReadDictionary();
 
         Assert.AreNotEqual("[north_path_narrative]", messages.GetMessage("north_path_narrative"));
+        Assert.AreNotEqual("[dragon_arrival]", messages.GetMessage("dragon_arrival"));
         Assert.AreNotEqual("[dragon_intro]", messages.GetMessage("dragon_intro"));
         Assert.AreNotEqual("[dragon_stats_intro]", messages.GetMessage("dragon_stats_intro"));
         Assert.AreNotEqual("[dragon_encounter_prompt]", messages.GetMessage("dragon_encounter_prompt"));

@@ -221,6 +221,18 @@ public class MessagesTests
     }
 
     [TestMethod]
+    public void ItalianShrineChoiceWordsNormalizeToShrineChoices()
+    {
+        Messages messages = new Messages();
+        messages.SetCurrentLanguage("Italian");
+        messages.ReadDictionary();
+        Assert.AreEqual(ShrineChoice.Offer, messages.NormalizeShrineChoice("offrire"));
+        Assert.AreEqual(ShrineChoice.Pray, messages.NormalizeShrineChoice("pregare"));
+        Assert.AreEqual(ShrineChoice.Leave, messages.NormalizeShrineChoice("lasciare"));
+        Assert.IsNull(messages.NormalizeShrineChoice("leave"));
+    }
+
+    [TestMethod]
     public void ReadDictionary_AllRequiredKeysExistInEnglish()
     {
         Messages messages = new Messages();
