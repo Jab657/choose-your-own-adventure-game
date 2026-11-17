@@ -48,9 +48,10 @@ public class EndOfInputTests
     [DataRow(ToNextAction, DisplayName = "next action")]
     [DataRow(ToPath, DisplayName = "path choice")]
     [DataRow(ToPath + "s\n", DisplayName = "Merchant")]
-    [DataRow(ToPath + "n\n", DisplayName = "dragon encounter")]
+    [DataRow(ToPath + "n\n", DisplayName = "Shrine")]
+    [DataRow(ToPath + "n\nl\n", DisplayName = "dragon encounter")]
     // The dice are random, so combat may end before its prompt; either way the game must return.
-    [DataRow(ToPath + "n\na\n", DisplayName = "combat")]
+    [DataRow(ToPath + "n\nl\na\n", DisplayName = "combat")]
     public void Game_Returns_WhenInputEndsAtPrompt(string input)
     {
         var (returned, _) = PlayGame(input);

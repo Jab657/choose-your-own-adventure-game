@@ -10,6 +10,7 @@ public class Messages
     private Dictionary<string, string> _displayOccupationMap;
     private Dictionary<string, string> _displayWeaponMap;
     private Dictionary<string, string> _merchantChoiceMap;
+    private Dictionary<string, ShrineChoice> _shrineChoiceMap;
 
     public Messages()
     {
@@ -21,6 +22,7 @@ public class Messages
         _displayOccupationMap = new Dictionary<string, string>();
         _displayWeaponMap = new Dictionary<string, string>();
         _merchantChoiceMap = new Dictionary<string, string>();
+        _shrineChoiceMap = new Dictionary<string, ShrineChoice>();
     }
 
     public void SetCurrentLanguage(string language)
@@ -63,6 +65,10 @@ public class Messages
         _merchantChoiceMap = new Dictionary<string, string>();
         foreach (JsonProperty entry in langSection.GetProperty("merchantChoiceMap").EnumerateObject())
             _merchantChoiceMap[entry.Name] = entry.Value.GetString() ?? string.Empty;
+
+        _shrineChoiceMap = new Dictionary<string, ShrineChoice>();
+        foreach (JsonProperty entry in langSection.GetProperty("shrineChoiceMap").EnumerateObject())
+            _shrineChoiceMap[entry.Name] = Enum.Parse<ShrineChoice>(entry.Value.GetString() ?? string.Empty, ignoreCase: true);
     }
 
     public string GetMessage(string key)
@@ -112,6 +118,13 @@ public class Messages
     {
         if (string.IsNullOrWhiteSpace(input)) return null;
         return _merchantChoiceMap.TryGetValue(input.Trim().ToLower(), out string? canonical) ? canonical : null;
+    }
+
+    // Returns the Shrine choice for a Shrine prompt input in the current language, or null if invalid.
+    public ShrineChoice? NormalizeShrineChoice(string? input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return null;
+        return _shrineChoiceMap.TryGetValue(input.Trim().ToLower(), out ShrineChoice choice) ? choice : null;
     }
 
 

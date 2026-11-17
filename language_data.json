@@ -51,7 +51,11 @@
       "merchant_bought_armor": "You hand Oswin {0} Gold. He helps you into a suit of shimmering Magical Armor.",
       "merchant_bought_weapon": "You hand Oswin {0} Gold. He passes his hand over your weapon and it glows with power. Your weapon is now a {1}.",
       "merchant_not_enough_gold": "Oswin shakes his head. 'That costs {0} Gold, and you have only {1}.'",
-      "north_path_narrative": "You take the North path. After walking for hours, the air grows colder, and the trees become more sparse. You are confronted with a dragon. The dragon has a hoard of gold behind it.",
+      "north_path_narrative": "You take the North path. After walking for hours, the air grows colder, and the trees become more sparse.",
+      "shrine_intro": "Beside the trail stands an old stone Shrine, half buried in snow. Candle stubs and dried flowers rest at its base, and the wind carries a faint whisper.",
+      "shrine_prompt": "Enter 'o' to make an offering, 'p' to pray, or 'l' to leave.",
+      "shrine_leave": "You bow your head to the Shrine and walk past.",
+      "dragon_arrival": "You press on up the mountain. You are confronted with a dragon. The dragon has a hoard of gold behind it.",
       "dragon_intro": "The dragon says 'I am {0}. Leave or perish!'",
       "dragon_stats_intro": "Your magic ring gives you the stats on the dragon.",
       "dragon_encounter_prompt": "Do you wish to retreat or attack? Enter 'r' for retreat. Enter 'a' for attack.",
@@ -126,6 +130,14 @@
       "weapon": "weapon",
       "l": "leave",
       "leave": "leave"
+    },
+    "shrineChoiceMap": {
+      "o": "offer",
+      "offer": "offer",
+      "p": "pray",
+      "pray": "pray",
+      "l": "leave",
+      "leave": "leave"
     }
   },
   "Spanish": {
@@ -180,7 +192,11 @@
       "merchant_bought_armor": "Le das a Oswin {0} de Oro. Te ayuda a ponerte una reluciente Armadura Magica.",
       "merchant_bought_weapon": "Le das a Oswin {0} de Oro. Pasa la mano sobre tu arma y esta brilla con poder. Tu arma ahora es: {1}.",
       "merchant_not_enough_gold": "Oswin niega con la cabeza. 'Eso cuesta {0} de Oro, y solo tienes {1}.'",
-      "north_path_narrative": "Tomas el camino del norte. Despues de caminar durante horas, el aire se vuelve mas frio y los arboles mas escasos. Te enfrentas a un dragon. El dragon tiene una horda de oro detras de el.",
+      "north_path_narrative": "Tomas el camino del norte. Despues de caminar durante horas, el aire se vuelve mas frio y los arboles mas escasos.",
+      "shrine_intro": "Junto al sendero se alza un viejo Santuario de piedra, medio enterrado en la nieve. A sus pies descansan restos de velas y flores secas, y el viento trae un leve susurro.",
+      "shrine_prompt": "Escribe 'o' para hacer una ofrenda, 'p' para rezar o 'l' para salir.",
+      "shrine_leave": "Inclinas la cabeza ante el Santuario y sigues tu camino.",
+      "dragon_arrival": "Sigues subiendo la montana. Te enfrentas a un dragon. El dragon tiene una horda de oro detras de el.",
       "dragon_intro": "El dragon dice 'Soy {0}. Vete o perece!'",
       "dragon_stats_intro": "Tu anillo magico te da las estadisticas del dragon.",
       "dragon_encounter_prompt": "Deseas retirarte o atacar? Escribe 'r' para retirarte. Escribe 'a' para atacar.",
@@ -255,6 +271,14 @@
       "arma": "weapon",
       "l": "leave",
       "salir": "leave"
+    },
+    "shrineChoiceMap": {
+      "o": "offer",
+      "ofrecer": "offer",
+      "p": "pray",
+      "rezar": "pray",
+      "l": "leave",
+      "salir": "leave"
     }
   },
   "French": {
@@ -309,7 +333,11 @@
       "merchant_bought_armor": "Vous donnez {0} pieces d'or a Oswin. Il vous aide a enfiler une scintillante Armure Magique.",
       "merchant_bought_weapon": "Vous donnez {0} pieces d'or a Oswin. Il passe la main sur votre arme, qui se met a briller de puissance. Votre arme est desormais : {1}.",
       "merchant_not_enough_gold": "Oswin secoue la tete. 'Cela coute {0} pieces d'or, et vous n'en avez que {1}.'",
-      "north_path_narrative": "Vous prenez le chemin du nord. Apres avoir marche pendant des heures, l'air devient plus froid et les arbres plus rares. Vous etes confronte a un dragon. Le dragon a un tresor d'or derriere lui.",
+      "north_path_narrative": "Vous prenez le chemin du nord. Apres avoir marche pendant des heures, l'air devient plus froid et les arbres plus rares.",
+      "shrine_intro": "Au bord du sentier se dresse un vieux Sanctuaire de pierre, a moitie enfoui sous la neige. Des bouts de bougie et des fleurs sechees reposent a sa base, et le vent porte un faible murmure.",
+      "shrine_prompt": "Tapez 'o' pour faire une offrande, 'p' pour prier ou 'l' pour partir.",
+      "shrine_leave": "Vous inclinez la tete devant le Sanctuaire et passez votre chemin.",
+      "dragon_arrival": "Vous continuez a gravir la montagne. Vous etes confronte a un dragon. Le dragon a un tresor d'or derriere lui.",
       "dragon_intro": "Le dragon dit 'Je suis {0}. Pars ou peris !'",
       "dragon_stats_intro": "Votre anneau magique vous donne les statistiques du dragon.",
       "dragon_encounter_prompt": "Souhaitez-vous vous retirer ou attaquer ? Tapez 'r' pour vous retirer. Tapez 'a' pour attaquer.",
@@ -384,6 +412,14 @@
       "arme": "weapon",
       "l": "leave",
       "partir": "leave"
+    },
+    "shrineChoiceMap": {
+      "o": "offer",
+      "offrir": "offer",
+      "p": "pray",
+      "prier": "pray",
+      "l": "leave",
+      "partir": "leave"
     }
   },
   "Italian": {
@@ -438,7 +474,11 @@
       "merchant_bought_armor": "Dai a Oswin {0} monete d'oro. Ti aiuta a indossare una scintillante Armatura Magica.",
       "merchant_bought_weapon": "Dai a Oswin {0} monete d'oro. Passa la mano sulla tua arma, che risplende di potere. La tua arma ora e: {1}.",
       "merchant_not_enough_gold": "Oswin scuote la testa. 'Costa {0} monete d'oro, e tu ne hai solo {1}.'",
-      "north_path_narrative": "Prendi il sentiero a nord. Dopo aver camminato per ore, l'aria si fa piu fredda e gli alberi piu radi. Ti trovi di fronte a un drago. Il drago ha un tesoro d'oro alle sue spalle.",
+      "north_path_narrative": "Prendi il sentiero a nord. Dopo aver camminato per ore, l'aria si fa piu fredda e gli alberi piu radi.",
+      "shrine_intro": "Accanto al sentiero sorge un vecchio Santuario di pietra, mezzo sepolto dalla neve. Mozziconi di candela e fiori secchi giacciono alla sua base, e il vento porta un debole sussurro.",
+      "shrine_prompt": "Scrivi 'o' per fare un'offerta, 'p' per pregare o 'l' per lasciare.",
+      "shrine_leave": "Chini il capo davanti al Santuario e prosegui.",
+      "dragon_arrival": "Continui a salire la montagna. Ti trovi di fronte a un drago. Il drago ha un tesoro d'oro alle sue spalle.",
       "dragon_intro": "Il drago dice 'Sono {0}. Vattene o perisci!'",
       "dragon_stats_intro": "Il tuo anello magico ti mostra le statistiche del drago.",
       "dragon_encounter_prompt": "Vuoi ritirarti o attaccare? Scrivi 'r' per ritirarti. Scrivi 'a' per attaccare.",
@@ -511,6 +551,14 @@
       "armatura": "armor",
       "w": "weapon",
       "arma": "weapon",
+      "l": "leave",
+      "lasciare": "leave"
+    },
+    "shrineChoiceMap": {
+      "o": "offer",
+      "offrire": "offer",
+      "p": "pray",
+      "pregare": "pray",
       "l": "leave",
       "lasciare": "leave"
     }

@@ -74,6 +74,8 @@ public class Game
                     }
                     else if (selectedPath == "north")
                     {
+                        Console.WriteLine(messages.GetMessage("north_path_narrative"));
+                        new Shrine(die).Visit(player, messages);
                         HandleDragonEncounter(player, dragon, messages);
 
                         running = false;
@@ -150,7 +152,7 @@ public class Game
 
     private void HandleDragonEncounter(Player player, Dragon dragon, Messages messages)
     {
-        Console.WriteLine(messages.GetMessage("north_path_narrative"));
+        Console.WriteLine(messages.GetMessage("dragon_arrival"));
 
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine(string.Format(messages.GetMessage("dragon_intro"), dragon.Name));
