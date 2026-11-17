@@ -4,13 +4,13 @@
 
 **Blocked by:** 02 (Check the Inventory at the path prompt)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] The Merchant, Shrine and dragon-encounter prompts each check for the Inventory command before their own choices. On a match they display the Inventory and show the same prompt again, without the invalid-choice message and without changing any state.
-- [ ] The hint message from ticket 02 is printed after each of these three prompt lines, before "Enter choice:". The prompt messages themselves are not reworded.
-- [ ] The combat attack/retreat prompt and the menu after character creation are unchanged.
-- [ ] If input ends at any of these prompts, the game still stops cleanly.
-- [ ] Tests (whole-game runs on scripted input):
+- [x] The Merchant, Shrine and dragon-encounter prompts each check for the Inventory command before their own choices. On a match they display the Inventory and show the same prompt again, without the invalid-choice message and without changing any state.
+- [x] The hint message from ticket 02 is printed after each of these three prompt lines, before "Enter choice:". The prompt messages themselves are not reworded.
+- [x] The combat attack/retreat prompt and the menu after character creation are unchanged.
+- [x] If input ends at any of these prompts, the game still stops cleanly.
+- [x] Tests (whole-game runs on scripted input):
   - South → `i` at the Merchant prompt shows the Inventory and the Merchant prompt again; leaving afterwards works.
   - North → `i` at the Shrine prompt shows the Inventory and the Shrine prompt again; walking past afterwards works.
   - North → walk past → `i` at the dragon-encounter prompt shows the Inventory and the dragon prompt again; retreating afterwards works.
