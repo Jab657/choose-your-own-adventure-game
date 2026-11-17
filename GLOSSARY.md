@@ -9,8 +9,12 @@ A trader met once per game on the South path who sells one item: Magical Armor o
 _Avoid_: Shop, vendor, trader
 
 **Magical Armor**:
-Armor that absorbs a fixed amount of damage from every hit that gets past the player's defense.
+Armor that absorbs a fixed amount of damage from every hit that gets past the player's defense. Buying it replaces the player's Leather Armor.
 _Avoid_: Shield, protection, defense
+
+**Leather Armor**:
+The plain armor every character starts out wearing. It absorbs no damage. The player wears it until they buy Magical Armor, which replaces it.
+_Avoid_: Basic armor, starting armor, default armor
 
 **Magical Weapon**:
 The player's occupation weapon after enchantment, with a higher maximum damage. It is the same weapon, not a replacement.
@@ -27,3 +31,7 @@ _Avoid_: Altar, temple
 **Gold**:
 The player's currency: a fixed amount every character starts with, spent at the Merchant or as an offering at the Shrine.
 _Avoid_: Money, coins, currency
+
+**Inventory**:
+Everything the player is carrying or wearing: their weapon, their armor (Leather Armor or Magical Armor), and their Gold. Checking the Inventory is free and never changes anything. The Inventory has no size or weight limit.
+_Avoid_: Items, gear, bag, equipment
