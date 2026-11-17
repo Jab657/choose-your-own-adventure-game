@@ -35,3 +35,7 @@ _Avoid_: Money, coins, currency
 **Inventory**:
 Everything the player is carrying or wearing: their weapon, their armor (Leather Armor or Magical Armor), and their Gold. Checking the Inventory is free and never changes anything. The Inventory has no size or weight limit.
 _Avoid_: Items, gear, bag, equipment
+
+**Prompt**:
+A question the game asks the player, repeated until they give one of its accepted answers. Some Prompts also let the player check the Inventory.
+_Avoid_: Menu, question, input
