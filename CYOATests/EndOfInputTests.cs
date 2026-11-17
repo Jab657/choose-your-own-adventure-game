@@ -47,6 +47,7 @@ public class EndOfInputTests
     [DataRow(ToRoll + "roll\nroll\n", DisplayName = "health roll")]
     [DataRow(ToNextAction, DisplayName = "next action")]
     [DataRow(ToPath, DisplayName = "path choice")]
+    [DataRow(ToPath + "i\n", DisplayName = "path choice after checking the Inventory")]
     [DataRow(ToPath + "s\n", DisplayName = "Merchant")]
     [DataRow(ToPath + "n\n", DisplayName = "Shrine")]
     [DataRow(ToPath + "n\nl\n", DisplayName = "dragon encounter")]

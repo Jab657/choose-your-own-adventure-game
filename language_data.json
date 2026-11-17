@@ -27,6 +27,7 @@
       "next_action": "What would you like to do next? 1. List character stats. 2. Proceed on an adventure. Type 1 or 2.",
       "proceeding": "Proceeding on an adventure...",
       "stats_header": "----- Character Summary -----",
+      "inventory_header": "----- Inventory -----",
       "stats_name": "Name: ",
       "stats_race": "Race: ",
       "stats_occupation": "Occupation: ",
@@ -41,6 +42,7 @@
       "leather_armor_display": "Leather Armor (absorbs {0} damage)",
       "adventure_ends": "Adventure ends. Bye.",
       "path_prompt_full": "You are walking in the mountains. You see two paths, one leading north and higher into the mountains. The other path leads south and into the woods. Which do you take? Enter 'n' for North. Enter 's' for South. Enter 'e' for exit game.",
+      "inventory_hint": "Enter 'i' to check your inventory.",
       "path_invalid": "Invalid choice. Please enter 'n', 's', or 'e'.",
       "merchant_intro": "You take the South path. Beside the trail stands a small wooden stall, and a cheerful man waves you over. 'Greetings, traveller! I am Oswin, a Merchant. I have treasures to sell, but you may buy only one.'",
       "merchant_offer_armor": "a. Magical Armor - {0} Gold",
@@ -145,6 +147,10 @@
       "pray": "pray",
       "l": "leave",
       "leave": "leave"
+    },
+    "inventoryCommandMap": {
+      "i": "inventory",
+      "inventory": "inventory"
     }
   },
   "Spanish": {
@@ -175,6 +181,7 @@
       "next_action": "Que quieres hacer? 1. Ver estadisticas. 2. Comenzar aventura. Escribe 1 o 2.",
       "proceeding": "Comenzando la aventura...",
       "stats_header": "----- Resumen del Personaje -----",
+      "inventory_header": "----- Inventario -----",
       "stats_name": "Nombre: ",
       "stats_race": "Raza: ",
       "stats_occupation": "Ocupacion: ",
@@ -189,6 +196,7 @@
       "leather_armor_display": "Armadura de Cuero (absorbe {0} de dano)",
       "adventure_ends": "La aventura termina. Adios.",
       "path_prompt_full": "Estas caminando en las montanas. Ves dos caminos, uno va al norte y mas arriba en las montanas. El otro va al sur y hacia el bosque. Cual tomas? Escribe 'n' para Norte. Escribe 's' para Sur. Escribe 'e' para salir del juego.",
+      "inventory_hint": "Escribe 'i' para revisar tu inventario.",
       "path_invalid": "Opcion invalida. Por favor escribe 'n', 's' o 'e'.",
       "merchant_intro": "Tomas el camino del sur. Junto al sendero hay un pequeno puesto de madera, y un hombre alegre te hace senas. 'Saludos, viajero! Soy Oswin, un Mercader. Tengo tesoros para vender, pero solo puedes comprar uno.'",
       "merchant_offer_armor": "a. Armadura Magica - {0} de Oro",
@@ -293,6 +301,10 @@
       "rezar": "pray",
       "l": "leave",
       "salir": "leave"
+    },
+    "inventoryCommandMap": {
+      "i": "inventory",
+      "inventario": "inventory"
     }
   },
   "French": {
@@ -323,6 +335,7 @@
       "next_action": "Que voulez-vous faire? 1. Voir les stats. 2. Commencer l'aventure. Tapez 1 ou 2.",
       "proceeding": "Debut de l'aventure...",
       "stats_header": "----- Resume du Personnage -----",
+      "inventory_header": "----- Inventaire -----",
       "stats_name": "Nom: ",
       "stats_race": "Race: ",
       "stats_occupation": "Occupation: ",
@@ -337,6 +350,7 @@
       "leather_armor_display": "Armure de Cuir (absorbe {0} degats)",
       "adventure_ends": "L'aventure se termine. Au revoir.",
       "path_prompt_full": "Vous marchez dans les montagnes. Vous voyez deux chemins, l'un mene vers le nord et plus haut dans les montagnes. L'autre mene vers le sud et dans les bois. Lequel choisissez-vous ? Tapez 'n' pour Nord. Tapez 's' pour Sud. Tapez 'e' pour quitter le jeu.",
+      "inventory_hint": "Tapez 'i' pour consulter votre inventaire.",
       "path_invalid": "Choix invalide. Veuillez taper 'n', 's' ou 'e'.",
       "merchant_intro": "Vous prenez le chemin du sud. Au bord du sentier se dresse un petit etal en bois, et un homme jovial vous fait signe. 'Salutations, voyageur ! Je suis Oswin, un Marchand. J'ai des tresors a vendre, mais vous ne pouvez en acheter qu'un seul.'",
       "merchant_offer_armor": "a. Armure Magique - {0} pieces d'or",
@@ -441,6 +455,10 @@
       "prier": "pray",
       "l": "leave",
       "partir": "leave"
+    },
+    "inventoryCommandMap": {
+      "i": "inventory",
+      "inventaire": "inventory"
     }
   },
   "Italian": {
@@ -471,6 +489,7 @@
       "next_action": "Cosa vuoi fare ora? 1. Vedi le statistiche. 2. Inizia l'avventura. Scrivi 1 o 2.",
       "proceeding": "Inizia l'avventura...",
       "stats_header": "----- Riepilogo del Personaggio -----",
+      "inventory_header": "----- Inventario -----",
       "stats_name": "Nome: ",
       "stats_race": "Razza: ",
       "stats_occupation": "Professione: ",
@@ -485,6 +504,7 @@
       "leather_armor_display": "Armatura di Cuoio (assorbe {0} danni)",
       "adventure_ends": "L'avventura finisce. Arrivederci.",
       "path_prompt_full": "Stai camminando tra le montagne. Vedi due sentieri, uno porta a nord e piu in alto sulle montagne. L'altro porta a sud e nel bosco. Quale prendi? Scrivi 'n' per Nord. Scrivi 's' per Sud. Scrivi 'e' per uscire dal gioco.",
+      "inventory_hint": "Scrivi 'i' per controllare il tuo inventario.",
       "path_invalid": "Scelta non valida. Per favore scrivi 'n', 's' o 'e'.",
       "merchant_intro": "Prendi il sentiero a sud. Accanto al sentiero c'e una piccola bancarella di legno, e un uomo allegro ti fa cenno. 'Salve, viaggiatore! Sono Oswin, un Mercante. Ho tesori da vendere, ma puoi comprarne solo uno.'",
       "merchant_offer_armor": "a. Armatura Magica - {0} monete d'oro",
@@ -589,6 +609,10 @@
       "pregare": "pray",
       "l": "leave",
       "lasciare": "leave"
+    },
+    "inventoryCommandMap": {
+      "i": "inventory",
+      "inventario": "inventory"
     }
   }
 }

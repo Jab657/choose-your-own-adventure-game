@@ -152,6 +152,20 @@ public class Player
         Console.WriteLine(messages.GetMessage("stats_health") + HealthPoints);
         Console.WriteLine(messages.GetMessage("stats_gold") + Gold);
 
+        DisplayWeaponAndArmor(messages);
+    }
+
+    // What the player is carrying or wearing: weapon, its maximum damage, armor and Gold.
+    public void DisplayInventory(Messages messages)
+    {
+        Console.WriteLine(messages.GetMessage("inventory_header"));
+        DisplayWeaponAndArmor(messages);
+        Console.WriteLine(messages.GetMessage("stats_gold") + Gold);
+    }
+
+    // The weapon, its maximum damage and the armor, as both the Character Summary and the Inventory show them.
+    private void DisplayWeaponAndArmor(Messages messages)
+    {
         if (Weapon != null)
         {
             Console.WriteLine(messages.GetMessage("stats_weapon") + messages.TranslateWeaponForDisplay(Weapon.Type));

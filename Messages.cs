@@ -11,6 +11,7 @@ public class Messages
     private Dictionary<string, string> _displayWeaponMap;
     private Dictionary<string, string> _merchantChoiceMap;
     private Dictionary<string, ShrineChoice> _shrineChoiceMap;
+    private HashSet<string> _inventoryCommands;
 
     public Messages()
     {
@@ -23,6 +24,7 @@ public class Messages
         _displayWeaponMap = new Dictionary<string, string>();
         _merchantChoiceMap = new Dictionary<string, string>();
         _shrineChoiceMap = new Dictionary<string, ShrineChoice>();
+        _inventoryCommands = new HashSet<string>();
     }
 
     public void SetCurrentLanguage(string language)
@@ -69,6 +71,10 @@ public class Messages
         _shrineChoiceMap = new Dictionary<string, ShrineChoice>();
         foreach (JsonProperty entry in langSection.GetProperty("shrineChoiceMap").EnumerateObject())
             _shrineChoiceMap[entry.Name] = Enum.Parse<ShrineChoice>(entry.Value.GetString() ?? string.Empty, ignoreCase: true);
+
+        _inventoryCommands = new HashSet<string>();
+        foreach (JsonProperty entry in langSection.GetProperty("inventoryCommandMap").EnumerateObject())
+            _inventoryCommands.Add(entry.Name);
     }
 
     public string GetMessage(string key)
@@ -137,6 +143,13 @@ public class Messages
     {
         if (string.IsNullOrWhiteSpace(input)) return null;
         return _shrineChoiceMap.TryGetValue(input.Trim().ToLower(), out ShrineChoice choice) ? choice : null;
+    }
+
+    // Whether the input asks to check the Inventory in the current language ("i" or the full word).
+    public bool IsInventoryCommand(string? input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return false;
+        return _inventoryCommands.Contains(input.Trim().ToLower());
     }
 
 

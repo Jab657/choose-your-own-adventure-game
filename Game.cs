@@ -60,7 +60,7 @@ public class Game
                 bool inAdventureMenu = true;
                 while (inAdventureMenu)
                 {
-                    string selectedPath = PromptForPath(messages);
+                    string selectedPath = PromptForPath(player, messages);
 
                     if (selectedPath == "exit")
                     {
@@ -129,13 +129,21 @@ public class Game
                trimmed == "r" || trimmed == "retreat";
     }
 
-    private string PromptForPath(Messages messages)
+    private string PromptForPath(Player player, Messages messages)
     {
         while (true)
         {
             Console.WriteLine(messages.GetMessage("path_prompt_full"));
+            Console.WriteLine(messages.GetMessage("inventory_hint"));
             Console.Write(messages.GetMessage("enter_choice"));
             string input = ConsoleInput.ReadLine().Trim().ToLower();
+
+            // Checking the Inventory is free: show it, then the same prompt again.
+            if (messages.IsInventoryCommand(input))
+            {
+                player.DisplayInventory(messages);
+                continue;
+            }
 
             if (input == "north" || input == "n")
                 return "north";
