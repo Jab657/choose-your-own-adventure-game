@@ -4,11 +4,11 @@
 
 **Blocked by:** 02 (Load every language map with one loader)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Prompt's "ask" behaves as the spec describes: question, optional Inventory hint, optional "Enter choice:", trim and lowercase, free Inventory check when offered, canonical value on a valid answer, invalid message and ask again otherwise, end-of-input signal when input ends.
-- [ ] Prompt tests, through its interface: valid answer; mixed case and spaces; invalid then valid; Inventory offered (hint, "Enter choice:", Inventory shown, asked again, player unchanged); Inventory not offered (command invalid, no hint); same-line flag; input ending; translated answers.
-- [ ] Path and dragon choice maps added to English, Spanish, French and Italian with the same English words and canonical values; the coverage test from 02 covers them.
-- [ ] Path, Merchant, Shrine and dragon prompts use Prompt; their own loops and the four copies of the Inventory check are gone. Call sites use named arguments.
-- [ ] The text module's Inventory-command, Merchant-choice and Shrine-choice methods are deleted; their test cases move to the Prompt tests.
-- [ ] The whole-game Inventory, end-of-input and North path tests, and the Merchant and Shrine visit tests, pass with only setup changes.
+- [x] Prompt's "ask" behaves as the spec describes: question, optional Inventory hint, optional "Enter choice:", trim and lowercase, free Inventory check when offered, canonical value on a valid answer, invalid message and ask again otherwise, end-of-input signal when input ends.
+- [x] Prompt tests, through its interface: valid answer; mixed case and spaces; invalid then valid; Inventory offered (hint, "Enter choice:", Inventory shown, asked again, player unchanged); Inventory not offered (command invalid, no hint); same-line flag; input ending; translated answers.
+- [x] Path and dragon choice maps added to English, Spanish, French and Italian with the same English words and canonical values; the coverage test from 02 covers them.
+- [x] Path, Merchant, Shrine and dragon prompts use Prompt; their own loops and the four copies of the Inventory check are gone. Call sites use named arguments.
+- [x] The text module's Inventory-command, Merchant-choice and Shrine-choice methods are deleted; their test cases move to the Prompt tests.
+- [x] The whole-game Inventory, end-of-input and North path tests, and the Merchant and Shrine visit tests, pass with only setup changes.
