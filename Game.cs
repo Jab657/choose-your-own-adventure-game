@@ -108,30 +108,6 @@ public class Game
             Console.WriteLine(messages.GetMessage("defeat"));
     }
 
-    public bool IsValidMenuChoice(string? input)
-    {
-        if (string.IsNullOrWhiteSpace(input)) return false;
-        string trimmed = input.Trim();
-        return trimmed == "1" || trimmed == "2";
-    }
-
-    public bool IsValidPathChoice(string? input)
-    {
-        if (string.IsNullOrWhiteSpace(input)) return false;
-        string trimmed = input.Trim().ToLower();
-        return trimmed == "n" || trimmed == "north" ||
-               trimmed == "s" || trimmed == "south" ||
-               trimmed == "e" || trimmed == "exit";
-    }
-
-    public bool IsValidCombatChoice(string? input)
-    {
-        if (string.IsNullOrWhiteSpace(input)) return false;
-        string trimmed = input.Trim().ToLower();
-        return trimmed == "a" || trimmed == "attack" ||
-               trimmed == "r" || trimmed == "retreat";
-    }
-
     private void HandleDragonEncounter(Player player, Dragon dragon, Messages messages, Prompt prompt)
     {
         Console.WriteLine(messages.GetMessage("dragon_arrival"));
