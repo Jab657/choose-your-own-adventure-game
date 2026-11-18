@@ -4,10 +4,10 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Written test-first: the new tests fail on the current code.
-- [ ] Combat test, building combat directly with a player and dragon whose health is high enough that nobody dies: an invalid answer then retreat gives exactly one attack round before the retreat, prints the invalid message, and shows the prompt again.
-- [ ] Combat test: `i` at the combat prompt gets the invalid message and no Inventory.
-- [ ] Attack and retreat at the combat prompt behave as before.
-- [ ] Input ending at the combat prompt still stops the game cleanly.
+- [x] Written test-first: the new tests fail on the current code.
+- [x] Combat test, building combat directly with a player and dragon whose health is high enough that nobody dies: an invalid answer then retreat gives exactly one attack round before the retreat, prints the invalid message, and shows the prompt again.
+- [x] Combat test: `i` at the combat prompt gets the invalid message and no Inventory.
+- [x] Attack and retreat at the combat prompt behave as before.
+- [x] Input ending at the combat prompt still stops the game cleanly.
