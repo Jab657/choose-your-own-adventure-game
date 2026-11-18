@@ -4,27 +4,14 @@ public class Messages
 {
     public string CurrentLanguage { get; set; }
     private Dictionary<string, string> _dictionary;
-    private Dictionary<string, string> _raceMap;
-    private Dictionary<string, string> _occupationMap;
-    private Dictionary<string, string> _displayRaceMap;
-    private Dictionary<string, string> _displayOccupationMap;
-    private Dictionary<string, string> _displayWeaponMap;
-    private Dictionary<string, string> _merchantChoiceMap;
-    private Dictionary<string, ShrineChoice> _shrineChoiceMap;
-    private HashSet<string> _inventoryCommands;
+    // Every map section of the current language (race, occupation, display and choice maps), by section name.
+    private Dictionary<string, Dictionary<string, string>> _maps;
 
     public Messages()
     {
         CurrentLanguage = "English";
         _dictionary = new Dictionary<string, string>();
-        _raceMap = new Dictionary<string, string>();
-        _occupationMap = new Dictionary<string, string>();
-        _displayRaceMap = new Dictionary<string, string>();
-        _displayOccupationMap = new Dictionary<string, string>();
-        _displayWeaponMap = new Dictionary<string, string>();
-        _merchantChoiceMap = new Dictionary<string, string>();
-        _shrineChoiceMap = new Dictionary<string, ShrineChoice>();
-        _inventoryCommands = new HashSet<string>();
+        _maps = new Dictionary<string, Dictionary<string, string>>();
     }
 
     public void SetCurrentLanguage(string language)
@@ -41,40 +28,39 @@ public class Messages
         JsonElement langSection = doc.RootElement.GetProperty(CurrentLanguage);
 
         _dictionary = new Dictionary<string, string>();
-        foreach (JsonProperty entry in langSection.GetProperty("dictionary").EnumerateObject())
-            _dictionary[entry.Name] = entry.Value.GetString() ?? string.Empty;
+        _maps = new Dictionary<string, Dictionary<string, string>>();
+        foreach (JsonProperty section in langSection.EnumerateObject())
+        {
+            Dictionary<string, string> entries = ReadStringMap(section.Value);
+            if (section.Name == "dictionary")
+                _dictionary = entries;
+            else
+                _maps[section.Name] = entries;
+        }
+    }
 
-        _raceMap = new Dictionary<string, string>();
-        foreach (JsonProperty entry in langSection.GetProperty("raceMap").EnumerateObject())
-            _raceMap[entry.Name] = entry.Value.GetString() ?? string.Empty;
+    private static Dictionary<string, string> ReadStringMap(JsonElement section)
+    {
+        var map = new Dictionary<string, string>();
+        foreach (JsonProperty entry in section.EnumerateObject())
+            map[entry.Name] = entry.Value.GetString() ?? string.Empty;
+        return map;
+    }
 
-        _occupationMap = new Dictionary<string, string>();
-        foreach (JsonProperty entry in langSection.GetProperty("occupationMap").EnumerateObject())
-            _occupationMap[entry.Name] = entry.Value.GetString() ?? string.Empty;
+    // The canonical English value of an answer in the named choice map of the current language,
+    // ignoring case and surrounding spaces, or null if the answer isn't in the map.
+    public string? LookupChoice(string mapName, string? answer)
+    {
+        if (!_maps.TryGetValue(mapName, out Dictionary<string, string>? map))
+            throw new KeyNotFoundException($"Choice map '{mapName}' is not loaded for {CurrentLanguage}.");
+        if (string.IsNullOrWhiteSpace(answer)) return null;
+        return map.TryGetValue(answer.Trim().ToLower(), out string? canonical) ? canonical : null;
+    }
 
-        _displayRaceMap = new Dictionary<string, string>();
-        foreach (JsonProperty entry in langSection.GetProperty("displayRaceMap").EnumerateObject())
-            _displayRaceMap[entry.Name] = entry.Value.GetString() ?? string.Empty;
-
-        _displayOccupationMap = new Dictionary<string, string>();
-        foreach (JsonProperty entry in langSection.GetProperty("displayOccupationMap").EnumerateObject())
-            _displayOccupationMap[entry.Name] = entry.Value.GetString() ?? string.Empty;
-
-        _displayWeaponMap = new Dictionary<string, string>();
-        foreach (JsonProperty entry in langSection.GetProperty("displayWeaponMap").EnumerateObject())
-            _displayWeaponMap[entry.Name] = entry.Value.GetString() ?? string.Empty;
-
-        _merchantChoiceMap = new Dictionary<string, string>();
-        foreach (JsonProperty entry in langSection.GetProperty("merchantChoiceMap").EnumerateObject())
-            _merchantChoiceMap[entry.Name] = entry.Value.GetString() ?? string.Empty;
-
-        _shrineChoiceMap = new Dictionary<string, ShrineChoice>();
-        foreach (JsonProperty entry in langSection.GetProperty("shrineChoiceMap").EnumerateObject())
-            _shrineChoiceMap[entry.Name] = Enum.Parse<ShrineChoice>(entry.Value.GetString() ?? string.Empty, ignoreCase: true);
-
-        _inventoryCommands = new HashSet<string>();
-        foreach (JsonProperty entry in langSection.GetProperty("inventoryCommandMap").EnumerateObject())
-            _inventoryCommands.Add(entry.Name);
+    private string TranslateForDisplay(string mapName, string englishName)
+    {
+        return _maps.TryGetValue(mapName, out Dictionary<string, string>? map)
+            && map.TryGetValue(englishName, out string? translated) ? translated : englishName;
     }
 
     public string GetMessage(string key)
@@ -84,39 +70,37 @@ public class Messages
 
     public bool IsValidRace(string? input)
     {
-        if (string.IsNullOrWhiteSpace(input)) return false;
-        return _raceMap.ContainsKey(input.Trim().ToLower());
+        return LookupChoice("raceMap", input) != null;
     }
 
     public string NormalizeRace(string input)
     {
-        return _raceMap.TryGetValue(input.Trim().ToLower(), out string? canonical) ? canonical : input;
+        return LookupChoice("raceMap", input) ?? input;
     }
 
     public bool IsValidOccupation(string? input)
     {
-        if (string.IsNullOrWhiteSpace(input)) return false;
-        return _occupationMap.ContainsKey(input.Trim().ToLower());
+        return LookupChoice("occupationMap", input) != null;
     }
 
     public string NormalizeOccupation(string input)
     {
-        return _occupationMap.TryGetValue(input.Trim().ToLower(), out string? canonical) ? canonical : input;
+        return LookupChoice("occupationMap", input) ?? input;
     }
 
     public string TranslateRaceForDisplay(string race)
     {
-        return _displayRaceMap.TryGetValue(race, out string? translated) ? translated : race;
+        return TranslateForDisplay("displayRaceMap", race);
     }
 
     public string TranslateOccupationForDisplay(string occupation)
     {
-        return _displayOccupationMap.TryGetValue(occupation, out string? translated) ? translated : occupation;
+        return TranslateForDisplay("displayOccupationMap", occupation);
     }
 
     public string TranslateWeaponForDisplay(string weaponType)
     {
-        return _displayWeaponMap.TryGetValue(weaponType, out string? translated) ? translated : weaponType;
+        return TranslateForDisplay("displayWeaponMap", weaponType);
     }
 
     // The armor's translated name and absorption, e.g. "Leather Armor (absorbs 0 damage)".
@@ -134,23 +118,19 @@ public class Messages
     // Returns "armor", "weapon" or "leave" for a Merchant menu input in the current language, or null if invalid.
     public string? NormalizeMerchantChoice(string? input)
     {
-        if (string.IsNullOrWhiteSpace(input)) return null;
-        return _merchantChoiceMap.TryGetValue(input.Trim().ToLower(), out string? canonical) ? canonical : null;
+        return LookupChoice("merchantChoiceMap", input);
     }
 
     // Returns the Shrine choice for a Shrine prompt input in the current language, or null if invalid.
     public ShrineChoice? NormalizeShrineChoice(string? input)
     {
-        if (string.IsNullOrWhiteSpace(input)) return null;
-        return _shrineChoiceMap.TryGetValue(input.Trim().ToLower(), out ShrineChoice choice) ? choice : null;
+        string? canonical = LookupChoice("shrineChoiceMap", input);
+        return canonical == null ? null : Enum.Parse<ShrineChoice>(canonical, ignoreCase: true);
     }
 
     // Whether the input asks to check the Inventory in the current language ("i" or the full word).
     public bool IsInventoryCommand(string? input)
     {
-        if (string.IsNullOrWhiteSpace(input)) return false;
-        return _inventoryCommands.Contains(input.Trim().ToLower());
+        return LookupChoice("inventoryCommandMap", input) != null;
     }
-
-
 }

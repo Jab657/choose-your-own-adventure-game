@@ -163,6 +163,40 @@ public class MessagesTests
     }
 
     [TestMethod]
+    public void ReadDictionary_EveryLanguageHasEveryEnglishMapWithTheSameMeanings()
+    {
+        string jsonPath = Path.Combine(AppContext.BaseDirectory, "language_data.json");
+        using System.Text.Json.JsonDocument doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(jsonPath));
+        System.Text.Json.JsonElement english = doc.RootElement.GetProperty("English");
+        var englishMapNames = english.EnumerateObject().Select(p => p.Name).Where(name => name != "dictionary").ToList();
+
+        Assert.IsTrue(englishMapNames.Count > 0, "English has no maps to compare against.");
+
+        foreach (System.Text.Json.JsonProperty language in doc.RootElement.EnumerateObject())
+        {
+            foreach (string mapName in englishMapNames)
+            {
+                Assert.IsTrue(language.Value.TryGetProperty(mapName, out System.Text.Json.JsonElement map),
+                    $"Map '{mapName}' is missing from {language.Name}.");
+
+                // Display maps are keyed by the English names; choice maps lead to the English canonical values.
+                bool isDisplayMap = mapName.StartsWith("display");
+                var expected = EnglishNamesIn(english.GetProperty(mapName), isDisplayMap);
+                var actual = EnglishNamesIn(map, isDisplayMap);
+                CollectionAssert.AreEquivalent(expected, actual,
+                    $"Map '{mapName}' in {language.Name} does not cover the same English values as in English.");
+            }
+        }
+    }
+
+    // The English names a map deals in: a display map's keys, or a choice map's canonical values.
+    private static List<string> EnglishNamesIn(System.Text.Json.JsonElement map, bool isDisplayMap) =>
+        map.EnumerateObject()
+            .Select(entry => isDisplayMap ? entry.Name : entry.Value.GetString() ?? string.Empty)
+            .Distinct()
+            .ToList();
+
+    [TestMethod]
     [DataRow("English", "magical long sword", "magical long sword")]
     [DataRow("English", "magical lightning bolt spell", "magical lightning bolt spell")]
     [DataRow("English", "magical dagger", "magical dagger")]
