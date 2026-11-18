@@ -4,10 +4,10 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] One loader reads every map section; adding a map to the language data needs no new loading code.
-- [ ] The Shrine choice map is string to string; the Shrine (or the existing Shrine choice method) converts to the Shrine's choice type, and Shrine behaviour is unchanged.
-- [ ] A single choice lookup exists, trimming and ignoring case like today's methods. The existing per-prompt methods stay for now.
-- [ ] Coverage test extended: every language has every map English has, and each choice map's set of canonical values equals English's. It fails if a map is removed from any language.
-- [ ] All existing tests pass unchanged.
+- [x] One loader reads every map section; adding a map to the language data needs no new loading code.
+- [x] The Shrine choice map is string to string; the Shrine (or the existing Shrine choice method) converts to the Shrine's choice type, and Shrine behaviour is unchanged.
+- [x] A single choice lookup exists, trimming and ignoring case like today's methods. The existing per-prompt methods stay for now.
+- [x] Coverage test extended: every language has every map English has, and each choice map's set of canonical values equals English's. It fails if a map is removed from any language.
+- [x] All existing tests pass unchanged.
