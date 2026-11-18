@@ -42,6 +42,11 @@ public class CombatTests
         return dragon;
     }
 
+    private static Combat CreateCombat(Player player, Dragon dragon, Messages messages)
+    {
+        return new Combat(player, dragon, messages, new Prompt(messages));
+    }
+
     // Health high enough that no attack round can end the fight, so only the answers decide it.
     private Combat CreateCombatNobodyCanWin(Messages messages)
     {
@@ -49,7 +54,7 @@ public class CombatTests
         player.HealthPoints = 1000;
         Dragon dragon = CreateTestDragon();
         dragon.HealthPoints = 1000;
-        return new Combat(player, dragon, messages);
+        return CreateCombat(player, dragon, messages);
     }
 
     // Runs the action with scripted console input and returns everything written to the console.
@@ -145,7 +150,7 @@ public class CombatTests
         Dragon dragon = new Dragon(new Die());
         Messages messages = CreateEnglishMessages();
 
-        Combat combat = new Combat(player, dragon, messages);
+        Combat combat = CreateCombat(player, dragon, messages);
 
         Assert.AreSame(player, combat.player);
         Assert.AreSame(dragon, combat.dragon);
@@ -158,7 +163,7 @@ public class CombatTests
         Dragon dragon = new Dragon(new Die());
         Messages messages = CreateEnglishMessages();
 
-        Combat combat = new Combat(player, dragon, messages);
+        Combat combat = CreateCombat(player, dragon, messages);
 
         Assert.IsFalse(combat.PlayerRetreated);
     }
@@ -170,7 +175,7 @@ public class CombatTests
         Dragon dragon = CreateTestDragon();
         Messages messages = CreateEnglishMessages();
 
-        Combat combat = new Combat(player, dragon, messages);
+        Combat combat = CreateCombat(player, dragon, messages);
 
         string result = combat.GetCombatStatsDisplay();
 
@@ -184,7 +189,7 @@ public class CombatTests
         Dragon dragon = CreateTestDragon();
         Messages messages = CreateEnglishMessages();
 
-        Combat combat = new Combat(player, dragon, messages);
+        Combat combat = CreateCombat(player, dragon, messages);
 
         string result = combat.GetCombatStatsDisplay();
 
@@ -200,7 +205,7 @@ public class CombatTests
         Dragon dragon = CreateTestDragon();
         Messages messages = CreateEnglishMessages();
 
-        Combat combat = new Combat(player, dragon, messages);
+        Combat combat = CreateCombat(player, dragon, messages);
 
         string result = combat.GetCombatStatsDisplay();
 
@@ -219,7 +224,7 @@ public class CombatTests
         Dragon dragon = CreateTestDragon();
         Messages messages = CreateEnglishMessages();
 
-        Combat combat = new Combat(player, dragon, messages);
+        Combat combat = CreateCombat(player, dragon, messages);
 
         string result = combat.GetCombatStatsDisplay();
 
@@ -239,7 +244,7 @@ public class CombatTests
         Dragon dragon = CreateTestDragon();
         Messages messages = CreateEnglishMessages();
 
-        Combat combat = new Combat(player, dragon, messages);
+        Combat combat = CreateCombat(player, dragon, messages);
 
         string result = combat.GetCombatStatsDisplay();
 
@@ -252,7 +257,7 @@ public class CombatTests
         Player player = CreateTestPlayer();
         player.Gold = 20;
         new Merchant().Purchase(player, MerchantItem.MagicalArmor);
-        Combat combat = new Combat(player, CreateTestDragon(), CreateEnglishMessages());
+        Combat combat = CreateCombat(player, CreateTestDragon(), CreateEnglishMessages());
 
         string result = combat.GetCombatStatsDisplay();
 
@@ -267,7 +272,7 @@ public class CombatTests
         player.Gold = 20;
         player.Weapon = new Weapon("lightning bolt spell", 12, "zap~~~~~~");
         new Merchant().Purchase(player, MerchantItem.MagicalWeapon);
-        Combat combat = new Combat(player, CreateTestDragon(), CreateEnglishMessages());
+        Combat combat = CreateCombat(player, CreateTestDragon(), CreateEnglishMessages());
 
         string[] lines = combat.GetCombatStatsDisplay().Split(Environment.NewLine);
 
@@ -278,7 +283,7 @@ public class CombatTests
     [TestMethod]
     public void GetCombatStatsDisplay_ForNewPlayer_ShowsLeatherArmorLine()
     {
-        Combat combat = new Combat(CreateTestPlayer(), CreateTestDragon(), CreateEnglishMessages());
+        Combat combat = CreateCombat(CreateTestPlayer(), CreateTestDragon(), CreateEnglishMessages());
 
         string result = combat.GetCombatStatsDisplay();
 
@@ -292,7 +297,7 @@ public class CombatTests
         Dragon dragon = CreateTestDragon();
         Messages messages = CreateEnglishMessages();
 
-        Combat combat = new Combat(player, dragon, messages);
+        Combat combat = CreateCombat(player, dragon, messages);
 
         string result = combat.GetCombatStatsDisplay();
 

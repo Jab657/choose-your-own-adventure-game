@@ -165,6 +165,23 @@
       "a": "attack",
       "retreat": "retreat",
       "r": "retreat"
+    },
+    "mainMenuChoiceMap": {
+      "1": "new game",
+      "2": "quit"
+    },
+    "nextActionChoiceMap": {
+      "1": "list stats",
+      "2": "continue"
+    },
+    "rollChoiceMap": {
+      "roll": "roll"
+    },
+    "combatChoiceMap": {
+      "attack": "attack",
+      "a": "attack",
+      "retreat": "retreat",
+      "r": "retreat"
     }
   },
   "Spanish": {
@@ -329,6 +346,23 @@
       "e": "exit"
     },
     "dragonChoiceMap": {
+      "attack": "attack",
+      "a": "attack",
+      "retreat": "retreat",
+      "r": "retreat"
+    },
+    "mainMenuChoiceMap": {
+      "1": "new game",
+      "2": "quit"
+    },
+    "nextActionChoiceMap": {
+      "1": "list stats",
+      "2": "continue"
+    },
+    "rollChoiceMap": {
+      "roll": "roll"
+    },
+    "combatChoiceMap": {
       "attack": "attack",
       "a": "attack",
       "retreat": "retreat",
@@ -501,6 +535,23 @@
       "a": "attack",
       "retreat": "retreat",
       "r": "retreat"
+    },
+    "mainMenuChoiceMap": {
+      "1": "new game",
+      "2": "quit"
+    },
+    "nextActionChoiceMap": {
+      "1": "list stats",
+      "2": "continue"
+    },
+    "rollChoiceMap": {
+      "roll": "roll"
+    },
+    "combatChoiceMap": {
+      "attack": "attack",
+      "a": "attack",
+      "retreat": "retreat",
+      "r": "retreat"
     }
   },
   "Italian": {
@@ -665,6 +716,23 @@
       "e": "exit"
     },
     "dragonChoiceMap": {
+      "attack": "attack",
+      "a": "attack",
+      "retreat": "retreat",
+      "r": "retreat"
+    },
+    "mainMenuChoiceMap": {
+      "1": "new game",
+      "2": "quit"
+    },
+    "nextActionChoiceMap": {
+      "1": "list stats",
+      "2": "continue"
+    },
+    "rollChoiceMap": {
+      "roll": "roll"
+    },
+    "combatChoiceMap": {
       "attack": "attack",
       "a": "attack",
       "retreat": "retreat",

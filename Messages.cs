@@ -68,26 +68,6 @@ public class Messages
         return _dictionary.ContainsKey(key) ? _dictionary[key] : $"[{key}]";
     }
 
-    public bool IsValidRace(string? input)
-    {
-        return LookupChoice("raceMap", input) != null;
-    }
-
-    public string NormalizeRace(string input)
-    {
-        return LookupChoice("raceMap", input) ?? input;
-    }
-
-    public bool IsValidOccupation(string? input)
-    {
-        return LookupChoice("occupationMap", input) != null;
-    }
-
-    public string NormalizeOccupation(string input)
-    {
-        return LookupChoice("occupationMap", input) ?? input;
-    }
-
     public string TranslateRaceForDisplay(string race)
     {
         return TranslateForDisplay("displayRaceMap", race);

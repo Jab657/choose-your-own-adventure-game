@@ -244,13 +244,11 @@ public class MessagesTests
     }
 
     [TestMethod]
-    public void ItalianRaceAndOccupationInputsNormalizeToCanonical()
+    public void TranslateWeaponForDisplay_Italian_ReturnsItalianName()
     {
         Messages messages = new Messages();
         messages.SetCurrentLanguage("Italian");
         messages.ReadDictionary();
-        Assert.AreEqual("Dwarf", messages.NormalizeRace("Nano"));
-        Assert.AreEqual("Archer", messages.NormalizeOccupation("arciere"));
         Assert.AreEqual("spada lunga", messages.TranslateWeaponForDisplay("long sword"));
     }
 
@@ -306,117 +304,5 @@ public class MessagesTests
             string result = messages.GetMessage(key);
             Assert.AreNotEqual($"[{key}]", result, $"Key '{key}' is missing from French dictionary.");
         }
-    }
-
-    // --- IsValidRace ---
-
-    [TestMethod]
-    public void IsValidRace_ReturnsTrue_ForHuman()
-    {
-        Messages messages = new Messages();
-        messages.SetCurrentLanguage("English");
-        messages.ReadDictionary();
-        Assert.IsTrue(messages.IsValidRace("human"));
-    }
-
-    [TestMethod]
-    public void IsValidRace_ReturnsTrue_CaseInsensitive()
-    {
-        Messages messages = new Messages();
-        messages.SetCurrentLanguage("English");
-        messages.ReadDictionary();
-        Assert.IsTrue(messages.IsValidRace("HUMAN"));
-    }
-
-    [TestMethod]
-    public void IsValidRace_ReturnsFalse_ForInvalidRace()
-    {
-        Messages messages = new Messages();
-        messages.SetCurrentLanguage("English");
-        messages.ReadDictionary();
-        Assert.IsFalse(messages.IsValidRace("orc"));
-    }
-
-    [TestMethod]
-    public void IsValidRace_ReturnsFalse_ForNull()
-    {
-        Messages messages = new Messages();
-        messages.SetCurrentLanguage("English");
-        messages.ReadDictionary();
-        Assert.IsFalse(messages.IsValidRace(null));
-    }
-
-    [TestMethod]
-    public void NormalizeRace_ReturnsCanonical_ForHuman()
-    {
-        Messages messages = new Messages();
-        messages.SetCurrentLanguage("English");
-        messages.ReadDictionary();
-        Assert.AreEqual("Human", messages.NormalizeRace("human"));
-    }
-
-    [TestMethod]
-    public void NormalizeRace_ReturnsCanonical_CaseInsensitive()
-    {
-        Messages messages = new Messages();
-        messages.SetCurrentLanguage("English");
-        messages.ReadDictionary();
-        Assert.AreEqual("Human", messages.NormalizeRace("HUMAN"));
-    }
-
-    // --- IsValidOccupation ---
-
-    [TestMethod]
-    public void IsValidOccupation_ReturnsTrue_ForFighter()
-    {
-        Messages messages = new Messages();
-        messages.SetCurrentLanguage("English");
-        messages.ReadDictionary();
-        Assert.IsTrue(messages.IsValidOccupation("fighter"));
-    }
-
-    [TestMethod]
-    public void IsValidOccupation_ReturnsTrue_CaseInsensitive()
-    {
-        Messages messages = new Messages();
-        messages.SetCurrentLanguage("English");
-        messages.ReadDictionary();
-        Assert.IsTrue(messages.IsValidOccupation("FIGHTER"));
-    }
-
-    [TestMethod]
-    public void IsValidOccupation_ReturnsFalse_ForInvalidOccupation()
-    {
-        Messages messages = new Messages();
-        messages.SetCurrentLanguage("English");
-        messages.ReadDictionary();
-        Assert.IsFalse(messages.IsValidOccupation("wizard"));
-    }
-
-    [TestMethod]
-    public void IsValidOccupation_ReturnsFalse_ForNull()
-    {
-        Messages messages = new Messages();
-        messages.SetCurrentLanguage("English");
-        messages.ReadDictionary();
-        Assert.IsFalse(messages.IsValidOccupation(null));
-    }
-
-    [TestMethod]
-    public void NormalizeOccupation_ReturnsCanonical_ForFighter()
-    {
-        Messages messages = new Messages();
-        messages.SetCurrentLanguage("English");
-        messages.ReadDictionary();
-        Assert.AreEqual("Fighter", messages.NormalizeOccupation("fighter"));
-    }
-
-    [TestMethod]
-    public void NormalizeOccupation_ReturnsCanonical_CaseInsensitive()
-    {
-        Messages messages = new Messages();
-        messages.SetCurrentLanguage("English");
-        messages.ReadDictionary();
-        Assert.AreEqual("Fighter", messages.NormalizeOccupation("FIGHTER"));
     }
 }

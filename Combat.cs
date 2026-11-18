@@ -6,11 +6,14 @@ public class Combat
 
     public bool PlayerRetreated { get; private set; }
 
-    public Combat(Player player, Dragon dragon, Messages messages)
+    private readonly Prompt _prompt;
+
+    public Combat(Player player, Dragon dragon, Messages messages, Prompt prompt)
     {
         this.player = player;
         this.dragon = dragon;
         this.messages = messages;
+        _prompt = prompt;
         PlayerRetreated = false;
     }
 
@@ -30,30 +33,16 @@ public class Combat
             if (player.HealthPoints <= 0)
                 return false;
 
-            if (!AskAttackOrRetreat())
+            string choice = _prompt.Ask(
+                questionKey: "attack_prompt",
+                choiceMap: "combatChoiceMap",
+                invalidKey: "invalid");
+            if (choice == "retreat")
             {
                 PlayerRetreated = true;
                 Console.WriteLine(messages.GetMessage("retreat_combat"));
                 return false;
             }
-        }
-    }
-
-    // Asks until the answer is attack (true) or retreat (false); anything else asks again.
-    private bool AskAttackOrRetreat()
-    {
-        while (true)
-        {
-            Console.WriteLine(messages.GetMessage("attack_prompt"));
-            string input = ConsoleInput.ReadLine().Trim().ToLower();
-
-            if (input == "a" || input == "attack")
-                return true;
-
-            if (input == "r" || input == "retreat")
-                return false;
-
-            Console.WriteLine(messages.GetMessage("invalid"));
         }
     }
 

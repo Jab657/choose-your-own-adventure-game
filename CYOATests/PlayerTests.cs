@@ -56,7 +56,7 @@ public class PlayerTests
         // Race, name, occupation, three "roll" prompts (strength, agility, health), then "2" to continue.
         string input = string.Join(Environment.NewLine, "human", "Aria", "fighter", "roll", "roll", "roll", "2") + Environment.NewLine;
 
-        RunWithConsole(input, () => player.CreateCharacter(messages));
+        RunWithConsole(input, () => player.CreateCharacter(messages, new Prompt(messages)));
 
         Assert.AreEqual(20, player.Gold);
     }

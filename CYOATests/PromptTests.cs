@@ -162,7 +162,49 @@ public class PromptTests
     }
 
     [TestMethod]
+    [DataRow("raceMap", "human", "Human")]
+    [DataRow("raceMap", "HUMAN", "Human")]
+    [DataRow("occupationMap", "fighter", "Fighter")]
+    [DataRow("occupationMap", "FIGHTER", "Fighter")]
+    [DataRow("mainMenuChoiceMap", "2", "quit")]
+    [DataRow("nextActionChoiceMap", "1", "list stats")]
+    [DataRow("rollChoiceMap", " Roll ", "roll")]
+    [DataRow("combatChoiceMap", "r", "retreat")]
+    public void Ask_EnglishAnswer_ReturnsCanonicalValue(string choiceMap, string input, string expected)
+    {
+        Prompt prompt = new Prompt(CreateMessages("English"));
+        string? answer = null;
+
+        RunWithConsole(input + "\n", () => answer = prompt.Ask(
+            questionKey: "race_prompt", choiceMap: choiceMap, invalidKey: "invalid"));
+
+        Assert.AreEqual(expected, answer);
+    }
+
+    [TestMethod]
+    [DataRow("raceMap", "race_invalid", "orc", "elf", "Elf")]
+    [DataRow("occupationMap", "occupation_invalid", "wizard", "thief", "Thief")]
+    public void Ask_UnknownRaceOrOccupation_PrintsItsOwnInvalidMessage(
+        string choiceMap, string invalidKey, string unknown, string valid, string expected)
+    {
+        Messages messages = CreateMessages("English");
+        Prompt prompt = new Prompt(messages);
+        string? answer = null;
+
+        string output = RunWithConsole(unknown + "\n" + valid + "\n", () => answer = prompt.Ask(
+            questionKey: "race_prompt", choiceMap: choiceMap, invalidKey: invalidKey));
+
+        CollectionAssert.Contains(output.Split(Environment.NewLine), messages.GetMessage(invalidKey));
+        Assert.AreEqual(expected, answer);
+    }
+
+    [TestMethod]
     [DataRow("Spanish", "raceMap", "Enano", "Dwarf")]
+    [DataRow("Spanish", "occupationMap", "guerrero", "Fighter")]
+    [DataRow("French", "raceMap", "elfe", "Elf")]
+    [DataRow("Spanish", "rollChoiceMap", "roll", "roll")]
+    [DataRow("French", "mainMenuChoiceMap", "1", "new game")]
+    [DataRow("Italian", "combatChoiceMap", "attack", "attack")]
     [DataRow("Italian", "raceMap", "Nano", "Dwarf")]
     [DataRow("Italian", "occupationMap", "arciere", "Archer")]
     [DataRow("French", "merchantChoiceMap", "armure", "armor")]

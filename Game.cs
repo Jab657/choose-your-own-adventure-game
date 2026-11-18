@@ -48,14 +48,16 @@ public class Game
         bool running = true;
         while (running)
         {
-            Console.WriteLine(messages.GetMessage("menu"));
-            Console.Write(messages.GetMessage("enter_choice"));
-            string choice = ConsoleInput.ReadLine().Trim();
+            string choice = prompt.Ask(
+                questionKey: "menu",
+                choiceMap: "mainMenuChoiceMap",
+                invalidKey: "invalid",
+                sameLine: true);
 
-            if (choice == "1")
+            if (choice == "new game")
             {
                 Player player = new Player();
-                player.CreateCharacter(messages);
+                player.CreateCharacter(messages, prompt);
                 Merchant merchant = new Merchant();
 
                 bool inAdventureMenu = true;
@@ -88,14 +90,10 @@ public class Game
                     }
                 }
             }
-            else if (choice == "2")
+            else if (choice == "quit")
             {
                 Console.WriteLine(messages.GetMessage("goodbye"));
                 running = false;
-            }
-            else
-            {
-                Console.WriteLine(messages.GetMessage("invalid"));
             }
         }
     }
@@ -157,7 +155,7 @@ public class Game
             return;
         }
 
-        Combat combat = new Combat(player, dragon, messages);
+        Combat combat = new Combat(player, dragon, messages, prompt);
         bool playerWon = combat.StartCombat();
 
         // Combat has already shown the retreat message.

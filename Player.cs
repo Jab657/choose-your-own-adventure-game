@@ -16,34 +16,26 @@ public class Player
     public Weapon? Weapon { get; set; }
     public Armor Armor { get; set; } = Armor.LeatherArmor();
 
-    public void CreateCharacter(Messages messages)
+    public void CreateCharacter(Messages messages, Prompt prompt)
     {
-        Race = PromptForRace(messages);
+        Race = prompt.Ask(
+            questionKey: "race_prompt",
+            choiceMap: "raceMap",
+            invalidKey: "race_invalid");
         Name = PromptForName(messages);
-        Occupation = PromptForOccupation(messages);
+        Occupation = prompt.Ask(
+            questionKey: "occupation_prompt",
+            choiceMap: "occupationMap",
+            invalidKey: "occupation_invalid");
 
         AssignWeaponByOccupation();
 
-        int strengthModifier = RollStrength(messages);
-        RollAgility(messages);
-        RollHealthPoints(messages, strengthModifier);
+        int strengthModifier = RollStrength(prompt);
+        RollAgility(prompt);
+        RollHealthPoints(prompt, strengthModifier);
         Gold = StartingGold;
 
-        PromptForNextAction(messages);
-    }
-
-    private string PromptForRace(Messages messages)
-    {
-        while (true)
-        {
-            Console.WriteLine(messages.GetMessage("race_prompt"));
-            string input = ConsoleInput.ReadLine().Trim();
-
-            if (messages.IsValidRace(input))
-                return messages.NormalizeRace(input);
-
-            Console.WriteLine(messages.GetMessage("race_invalid"));
-        }
+        AskForNextAction(messages, prompt);
     }
 
     private string PromptForName(Messages messages)
@@ -57,20 +49,6 @@ public class Player
                 return input;
 
             Console.WriteLine(messages.GetMessage("name_invalid"));
-        }
-    }
-
-    private string PromptForOccupation(Messages messages)
-    {
-        while (true)
-        {
-            Console.WriteLine(messages.GetMessage("occupation_prompt"));
-            string input = ConsoleInput.ReadLine().Trim();
-
-            if (messages.IsValidOccupation(input))
-                return messages.NormalizeOccupation(input);
-
-            Console.WriteLine(messages.GetMessage("occupation_invalid"));
         }
     }
 
@@ -93,9 +71,9 @@ public class Player
         }
     }
 
-    private int RollStrength(Messages messages)
+    private int RollStrength(Prompt prompt)
     {
-        PromptRoll(messages.GetMessage("roll_strength"), messages);
+        AskToRoll(prompt, "roll_strength");
         Strength = _die.Roll(20);
 
         int modifier = _die.Roll(4);
@@ -110,34 +88,42 @@ public class Player
         return modifier;
     }
 
-    private void RollAgility(Messages messages)
+    private void RollAgility(Prompt prompt)
     {
-        PromptRoll(messages.GetMessage("roll_agility"), messages);
+        AskToRoll(prompt, "roll_agility");
         Agility = _die.Roll(20);
 
         if (Race == "Halfling" || Race == "Elf")
             Agility += _die.Roll(4);
     }
 
-    private void RollHealthPoints(Messages messages, int strengthModifier)
+    private void RollHealthPoints(Prompt prompt, int strengthModifier)
     {
-        PromptRoll(messages.GetMessage("roll_health"), messages);
+        AskToRoll(prompt, "roll_health");
         HealthPoints = _die.Roll(20) + strengthModifier;
     }
 
-    private void PromptForNextAction(Messages messages)
+    // Waits until the player types "roll"; the answer itself carries nothing.
+    private static void AskToRoll(Prompt prompt, string questionKey)
+    {
+        prompt.Ask(
+            questionKey: questionKey,
+            choiceMap: "rollChoiceMap",
+            invalidKey: "roll_invalid");
+    }
+
+    // Shows the stats on "list stats" and asks again, until the player continues.
+    private void AskForNextAction(Messages messages, Prompt prompt)
     {
         while (true)
         {
-            Console.WriteLine(messages.GetMessage("next_action"));
-            string input = ConsoleInput.ReadLine().Trim();
-
-            if (input == "1")
-                DisplayStats(messages);
-            else if (input == "2")
+            string choice = prompt.Ask(
+                questionKey: "next_action",
+                choiceMap: "nextActionChoiceMap",
+                invalidKey: "invalid");
+            if (choice != "list stats")
                 return;
-            else
-                Console.WriteLine(messages.GetMessage("invalid"));
+            DisplayStats(messages);
         }
     }
 
@@ -247,19 +233,5 @@ public class Player
             output.Add(dragon.GetRandomDamageReply(messages));
 
         return string.Join(Environment.NewLine, output);
-    }
-
-    private void PromptRoll(string prompt, Messages messages)
-    {
-        while (true)
-        {
-            Console.WriteLine(prompt);
-            string input = ConsoleInput.ReadLine().Trim().ToLower();
-
-            if (input == "roll")
-                return;
-
-            Console.WriteLine(messages.GetMessage("roll_invalid"));
-        }
     }
 }
