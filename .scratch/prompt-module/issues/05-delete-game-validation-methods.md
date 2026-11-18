@@ -4,8 +4,8 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] The three validation methods are deleted.
-- [ ] Their tests are deleted; no other test depends on them.
-- [ ] The build and the full test suite pass.
+- [x] The three validation methods are deleted.
+- [x] Their tests are deleted; no other test depends on them.
+- [x] The build and the full test suite pass.
