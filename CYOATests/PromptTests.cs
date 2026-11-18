@@ -11,6 +11,21 @@ public class PromptTests
         return messages;
     }
 
+    private static Player CreatePlayer()
+    {
+        return new Player
+        {
+            Name = "TestHero",
+            Race = "Human",
+            Occupation = "Fighter",
+            Strength = 15,
+            Agility = 15,
+            HealthPoints = 20,
+            Gold = 20,
+            Weapon = new Weapon("long sword", 12, "-)=====>")
+        };
+    }
+
     // Runs the action with scripted console input and returns everything written to the console.
     private static string RunWithConsole(string input, Action action)
     {
@@ -60,21 +75,6 @@ public class PromptTests
         string invalid = "Invalid choice. Please enter 'n', 's', or 'e'." + Environment.NewLine;
         Assert.AreEqual(question + invalid + question + invalid + question, output);
         Assert.AreEqual("leave", answer);
-    }
-
-    private static Player CreatePlayer()
-    {
-        return new Player
-        {
-            Name = "TestHero",
-            Race = "Human",
-            Occupation = "Fighter",
-            Strength = 15,
-            Agility = 15,
-            HealthPoints = 20,
-            Gold = 20,
-            Weapon = new Weapon("long sword", 12, "-)=====>")
-        };
     }
 
     [TestMethod]

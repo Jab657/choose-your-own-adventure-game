@@ -75,11 +75,12 @@ public class Shrine
         // "Not enough Gold" asks again so the player can choose something else.
         while (true)
         {
-            ShrineChoice choice = Enum.Parse<ShrineChoice>(prompt.Ask(
+            string answer = prompt.Ask(
                 questionKey: "shrine_prompt",
                 choiceMap: "shrineChoiceMap",
                 invalidKey: "invalid",
-                offerInventoryOf: player), ignoreCase: true);
+                offerInventoryOf: player);
+            ShrineChoice choice = Enum.Parse<ShrineChoice>(answer, ignoreCase: true);
 
             if (choice == ShrineChoice.Offer)
             {
@@ -105,6 +106,7 @@ public class Shrine
                 return;
             }
 
+            // Prompt only returns accepted answers, so the only choice left is Leave.
             Choose(player, ShrineChoice.Leave);
             Console.WriteLine(messages.GetMessage("shrine_leave"));
             return;
