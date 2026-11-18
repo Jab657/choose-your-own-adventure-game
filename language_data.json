@@ -151,6 +151,20 @@
     "inventoryCommandMap": {
       "i": "inventory",
       "inventory": "inventory"
+    },
+    "pathChoiceMap": {
+      "north": "north",
+      "n": "north",
+      "south": "south",
+      "s": "south",
+      "exit": "exit",
+      "e": "exit"
+    },
+    "dragonChoiceMap": {
+      "attack": "attack",
+      "a": "attack",
+      "retreat": "retreat",
+      "r": "retreat"
     }
   },
   "Spanish": {
@@ -305,6 +319,20 @@
     "inventoryCommandMap": {
       "i": "inventory",
       "inventario": "inventory"
+    },
+    "pathChoiceMap": {
+      "north": "north",
+      "n": "north",
+      "south": "south",
+      "s": "south",
+      "exit": "exit",
+      "e": "exit"
+    },
+    "dragonChoiceMap": {
+      "attack": "attack",
+      "a": "attack",
+      "retreat": "retreat",
+      "r": "retreat"
     }
   },
   "French": {
@@ -459,6 +487,20 @@
     "inventoryCommandMap": {
       "i": "inventory",
       "inventaire": "inventory"
+    },
+    "pathChoiceMap": {
+      "north": "north",
+      "n": "north",
+      "south": "south",
+      "s": "south",
+      "exit": "exit",
+      "e": "exit"
+    },
+    "dragonChoiceMap": {
+      "attack": "attack",
+      "a": "attack",
+      "retreat": "retreat",
+      "r": "retreat"
     }
   },
   "Italian": {
@@ -613,6 +655,20 @@
     "inventoryCommandMap": {
       "i": "inventory",
       "inventario": "inventory"
+    },
+    "pathChoiceMap": {
+      "north": "north",
+      "n": "north",
+      "south": "south",
+      "s": "south",
+      "exit": "exit",
+      "e": "exit"
+    },
+    "dragonChoiceMap": {
+      "attack": "attack",
+      "a": "attack",
+      "retreat": "retreat",
+      "r": "retreat"
     }
   }
 }

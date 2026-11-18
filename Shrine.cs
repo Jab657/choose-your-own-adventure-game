@@ -68,25 +68,18 @@ public class Shrine
         return ShrineResult.PrayerAnswered;
     }
 
-    public void Visit(Player player, Messages messages)
+    public void Visit(Player player, Messages messages, Prompt prompt)
     {
         Console.WriteLine(messages.GetMessage("shrine_intro"));
 
+        // "Not enough Gold" asks again so the player can choose something else.
         while (true)
         {
-            Console.WriteLine(messages.GetMessage("shrine_prompt"));
-            Console.WriteLine(messages.GetMessage("inventory_hint"));
-            Console.Write(messages.GetMessage("enter_choice"));
-            string input = ConsoleInput.ReadLine();
-
-            // Checking the Inventory is free: show it, then the same prompt again.
-            if (messages.IsInventoryCommand(input))
-            {
-                player.DisplayInventory(messages);
-                continue;
-            }
-
-            ShrineChoice? choice = messages.NormalizeShrineChoice(input);
+            ShrineChoice choice = Enum.Parse<ShrineChoice>(prompt.Ask(
+                questionKey: "shrine_prompt",
+                choiceMap: "shrineChoiceMap",
+                invalidKey: "invalid",
+                offerInventoryOf: player), ignoreCase: true);
 
             if (choice == ShrineChoice.Offer)
             {
@@ -112,14 +105,9 @@ public class Shrine
                 return;
             }
 
-            if (choice == ShrineChoice.Leave)
-            {
-                Choose(player, ShrineChoice.Leave);
-                Console.WriteLine(messages.GetMessage("shrine_leave"));
-                return;
-            }
-
-            Console.WriteLine(messages.GetMessage("invalid"));
+            Choose(player, ShrineChoice.Leave);
+            Console.WriteLine(messages.GetMessage("shrine_leave"));
+            return;
         }
     }
 }

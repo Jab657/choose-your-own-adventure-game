@@ -38,6 +38,7 @@ public class Game
         Messages messages = new Messages();
         messages.SetCurrentLanguage(selectedLanguage);
         messages.ReadDictionary();
+        Prompt prompt = new Prompt(messages);
         // Display welcome message
         Console.WriteLine();
         Console.WriteLine(messages.GetMessage("welcome"));
@@ -60,7 +61,11 @@ public class Game
                 bool inAdventureMenu = true;
                 while (inAdventureMenu)
                 {
-                    string selectedPath = PromptForPath(player, messages);
+                    string selectedPath = prompt.Ask(
+                        questionKey: "path_prompt_full",
+                        choiceMap: "pathChoiceMap",
+                        invalidKey: "path_invalid",
+                        offerInventoryOf: player);
 
                     if (selectedPath == "exit")
                     {
@@ -70,13 +75,13 @@ public class Game
                     }
                     else if (selectedPath == "south")
                     {
-                        merchant.Visit(player, messages);
+                        merchant.Visit(player, messages, prompt);
                     }
                     else if (selectedPath == "north")
                     {
                         Console.WriteLine(messages.GetMessage("north_path_narrative"));
-                        new Shrine(die).Visit(player, messages);
-                        HandleDragonEncounter(player, dragon, messages);
+                        new Shrine(die).Visit(player, messages, prompt);
+                        HandleDragonEncounter(player, dragon, messages, prompt);
 
                         running = false;
                         inAdventureMenu = false;
@@ -129,36 +134,7 @@ public class Game
                trimmed == "r" || trimmed == "retreat";
     }
 
-    private string PromptForPath(Player player, Messages messages)
-    {
-        while (true)
-        {
-            Console.WriteLine(messages.GetMessage("path_prompt_full"));
-            Console.WriteLine(messages.GetMessage("inventory_hint"));
-            Console.Write(messages.GetMessage("enter_choice"));
-            string input = ConsoleInput.ReadLine().Trim().ToLower();
-
-            // Checking the Inventory is free: show it, then the same prompt again.
-            if (messages.IsInventoryCommand(input))
-            {
-                player.DisplayInventory(messages);
-                continue;
-            }
-
-            if (input == "north" || input == "n")
-                return "north";
-
-            if (input == "south" || input == "s")
-                return "south";
-
-            if (input == "exit" || input == "e")
-                return "exit";
-
-            Console.WriteLine(messages.GetMessage("path_invalid"));
-        }
-    }
-
-    private void HandleDragonEncounter(Player player, Dragon dragon, Messages messages)
+    private void HandleDragonEncounter(Player player, Dragon dragon, Messages messages, Prompt prompt)
     {
         Console.WriteLine(messages.GetMessage("dragon_arrival"));
 
@@ -168,44 +144,24 @@ public class Game
 
         Console.WriteLine(messages.GetMessage("dragon_stats_intro"));
         dragon.DisplayStats(messages);
-        while (true)
-        {
-            Console.WriteLine(messages.GetMessage("dragon_encounter_prompt"));
-            Console.WriteLine(messages.GetMessage("inventory_hint"));
-            Console.Write(messages.GetMessage("enter_choice"));
-            string input = ConsoleInput.ReadLine().Trim().ToLower();
 
-            // Checking the Inventory is free: show it, then the same prompt again.
-            if (messages.IsInventoryCommand(input))
-            {
-                player.DisplayInventory(messages);
-                continue;
-            }
+        string choice = prompt.Ask(
+            questionKey: "dragon_encounter_prompt",
+            choiceMap: "dragonChoiceMap",
+            invalidKey: "invalid",
+            offerInventoryOf: player);
 
-            if (input == "a" || input == "attack")
-            {
-                Combat combat = new Combat(player, dragon, messages);
-                bool playerWon = combat.StartCombat();
-
-                if (combat.PlayerRetreated)
-                {
-                    return; //combat already handled retreat message
-                }
-                else
-                {
-                   EndGame(playerWon, false, messages); 
-                }
-                
-                return;
-            }
-
-        if (input == "r" || input == "retreat")
+        if (choice == "retreat")
         {
             Console.WriteLine(messages.GetMessage("retreat"));
             return;
         }
 
-        Console.WriteLine(messages.GetMessage("invalid"));
+        Combat combat = new Combat(player, dragon, messages);
+        bool playerWon = combat.StartCombat();
+
+        // Combat has already shown the retreat message.
+        if (!combat.PlayerRetreated)
+            EndGame(playerWon, false, messages);
     }
-}
 }

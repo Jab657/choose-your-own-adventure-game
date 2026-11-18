@@ -114,23 +114,4 @@ public class Messages
         };
         return string.Format(GetMessage(key), armor.Absorption);
     }
-
-    // Returns "armor", "weapon" or "leave" for a Merchant menu input in the current language, or null if invalid.
-    public string? NormalizeMerchantChoice(string? input)
-    {
-        return LookupChoice("merchantChoiceMap", input);
-    }
-
-    // Returns the Shrine choice for a Shrine prompt input in the current language, or null if invalid.
-    public ShrineChoice? NormalizeShrineChoice(string? input)
-    {
-        string? canonical = LookupChoice("shrineChoiceMap", input);
-        return canonical == null ? null : Enum.Parse<ShrineChoice>(canonical, ignoreCase: true);
-    }
-
-    // Whether the input asks to check the Inventory in the current language ("i" or the full word).
-    public bool IsInventoryCommand(string? input)
-    {
-        return LookupChoice("inventoryCommandMap", input) != null;
-    }
 }

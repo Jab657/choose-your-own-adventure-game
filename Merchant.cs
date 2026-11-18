@@ -57,7 +57,7 @@ public class Merchant
         _ => throw new ArgumentOutOfRangeException(nameof(item), item, "Unknown Merchant item.")
     };
 
-    public void Visit(Player player, Messages messages)
+    public void Visit(Player player, Messages messages, Prompt prompt)
     {
         if (HasTraded)
         {
@@ -70,45 +70,14 @@ public class Merchant
         Console.WriteLine(string.Format(messages.GetMessage("merchant_offer_weapon"), MagicalWeaponPrice));
         Console.WriteLine(string.Format(messages.GetMessage("merchant_gold"), player.Gold));
 
+        // "Not enough Gold" asks again so the player can choose something else.
         while (true)
         {
-            Console.WriteLine(messages.GetMessage("merchant_prompt"));
-            Console.WriteLine(messages.GetMessage("inventory_hint"));
-            Console.Write(messages.GetMessage("enter_choice"));
-            string input = ConsoleInput.ReadLine();
-
-            // Checking the Inventory is free: show it, then the same prompt again.
-            if (messages.IsInventoryCommand(input))
-            {
-                player.DisplayInventory(messages);
-                continue;
-            }
-
-            string? choice = messages.NormalizeMerchantChoice(input);
-
-            MerchantItem? item = choice switch
-            {
-                "armor" => MerchantItem.MagicalArmor,
-                "weapon" => MerchantItem.MagicalWeapon,
-                _ => null
-            };
-
-            if (item != null)
-            {
-                // A visit only reaches the menu before trading, so AlreadyTraded cannot happen here.
-                PurchaseResult result = Purchase(player, item.Value);
-                if (result == PurchaseResult.Bought)
-                {
-                    Console.WriteLine(BoughtMessage(item.Value, player, messages));
-                    return;
-                }
-
-                if (result == PurchaseResult.NotEnoughGold)
-                {
-                    Console.WriteLine(string.Format(messages.GetMessage("merchant_not_enough_gold"), PriceOf(item.Value), player.Gold));
-                    continue;
-                }
-            }
+            string choice = prompt.Ask(
+                questionKey: "merchant_prompt",
+                choiceMap: "merchantChoiceMap",
+                invalidKey: "invalid",
+                offerInventoryOf: player);
 
             if (choice == "leave")
             {
@@ -117,7 +86,25 @@ public class Merchant
                 return;
             }
 
-            Console.WriteLine(messages.GetMessage("invalid"));
+            MerchantItem item = choice switch
+            {
+                "armor" => MerchantItem.MagicalArmor,
+                "weapon" => MerchantItem.MagicalWeapon,
+                _ => throw new InvalidOperationException($"Unknown Merchant choice '{choice}'.")
+            };
+
+            switch (Purchase(player, item))
+            {
+                case PurchaseResult.Bought:
+                    Console.WriteLine(BoughtMessage(item, player, messages));
+                    return;
+                case PurchaseResult.NotEnoughGold:
+                    Console.WriteLine(string.Format(messages.GetMessage("merchant_not_enough_gold"), PriceOf(item), player.Gold));
+                    continue;
+                default:
+                    // A visit only reaches the menu before trading, so AlreadyTraded cannot happen here.
+                    throw new InvalidOperationException("The Merchant has already traded.");
+            }
         }
     }
 

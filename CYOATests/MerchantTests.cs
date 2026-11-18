@@ -204,7 +204,7 @@ public class MerchantTests
         Player player = CreatePlayer();
         Messages messages = CreateMessages("English");
 
-        string output = RunWithConsole("l\n", () => merchant.Visit(player, messages));
+        string output = RunWithConsole("l\n", () => merchant.Visit(player, messages, new Prompt(messages)));
 
         StringAssert.Contains(output, "Oswin");
         StringAssert.Contains(output, "Magical Armor - 15 Gold");
@@ -225,7 +225,7 @@ public class MerchantTests
         Player player = CreatePlayer();
         Messages messages = CreateMessages(language);
 
-        string output = RunWithConsole(input + "\n", () => merchant.Visit(player, messages));
+        string output = RunWithConsole(input + "\n", () => merchant.Visit(player, messages, new Prompt(messages)));
 
         Assert.AreEqual(5, player.Gold);
         Assert.AreEqual(ArmorKind.Magical, player.Armor.Kind);
@@ -247,7 +247,7 @@ public class MerchantTests
         Player player = CreatePlayer();
         Messages messages = CreateMessages(language);
 
-        string output = RunWithConsole(input + "\n", () => merchant.Visit(player, messages));
+        string output = RunWithConsole(input + "\n", () => merchant.Visit(player, messages, new Prompt(messages)));
 
         Assert.AreEqual(0, player.Gold);
         Assert.AreEqual("magical long sword", player.Weapon!.Type);
@@ -271,7 +271,7 @@ public class MerchantTests
         player.Gold = 15;
         Messages messages = CreateMessages(language);
 
-        string output = RunWithConsole("w\na\n", () => merchant.Visit(player, messages));
+        string output = RunWithConsole("w\na\n", () => merchant.Visit(player, messages, new Prompt(messages)));
 
         StringAssert.Contains(output, string.Format(messages.GetMessage("merchant_not_enough_gold"), 20, 15));
         Assert.IsFalse(output.Contains(messages.GetMessage("invalid")));
@@ -293,7 +293,7 @@ public class MerchantTests
         player.Gold = 10;
         Messages messages = CreateMessages(language);
 
-        string output = RunWithConsole("a\nl\n", () => merchant.Visit(player, messages));
+        string output = RunWithConsole("a\nl\n", () => merchant.Visit(player, messages, new Prompt(messages)));
 
         string refusal = messages.GetMessage("merchant_not_enough_gold");
         Assert.AreNotEqual("[merchant_not_enough_gold]", refusal);
@@ -316,7 +316,7 @@ public class MerchantTests
         Weapon weaponBefore = player.Weapon!;
         Messages messages = CreateMessages("English");
 
-        string output = RunWithConsole(input + "\n", () => merchant.Visit(player, messages));
+        string output = RunWithConsole(input + "\n", () => merchant.Visit(player, messages, new Prompt(messages)));
 
         Assert.IsTrue(merchant.HasTraded);
         Assert.AreEqual(20, player.Gold);
@@ -334,7 +334,7 @@ public class MerchantTests
         Merchant merchant = new Merchant();
         Messages messages = CreateMessages(language);
 
-        string output = RunWithConsole(leaveWord + "\n", () => merchant.Visit(CreatePlayer(), messages));
+        string output = RunWithConsole(leaveWord + "\n", () => merchant.Visit(CreatePlayer(), messages, new Prompt(messages)));
 
         Assert.IsTrue(merchant.HasTraded);
         StringAssert.Contains(output, "Oswin");
@@ -350,7 +350,7 @@ public class MerchantTests
         Merchant merchant = new Merchant();
         Messages messages = CreateMessages("English");
 
-        string output = RunWithConsole(input + "\n", () => merchant.Visit(CreatePlayer(), messages));
+        string output = RunWithConsole(input + "\n", () => merchant.Visit(CreatePlayer(), messages, new Prompt(messages)));
 
         Assert.IsTrue(merchant.HasTraded);
         Assert.IsFalse(output.Contains(messages.GetMessage("invalid")));
@@ -362,7 +362,7 @@ public class MerchantTests
         Merchant merchant = new Merchant();
         Messages messages = CreateMessages("English");
 
-        string output = RunWithConsole("x\n\nl\n", () => merchant.Visit(CreatePlayer(), messages));
+        string output = RunWithConsole("x\n\nl\n", () => merchant.Visit(CreatePlayer(), messages, new Prompt(messages)));
 
         string invalid = messages.GetMessage("invalid");
         int invalidCount = output.Split(invalid).Length - 1;
@@ -379,10 +379,10 @@ public class MerchantTests
         Merchant merchant = new Merchant();
         Player player = CreatePlayer();
         Messages messages = CreateMessages("English");
-        RunWithConsole("l\n", () => merchant.Visit(player, messages));
+        RunWithConsole("l\n", () => merchant.Visit(player, messages, new Prompt(messages)));
 
         // No input is scripted: if the second visit prompted, reading would throw EndOfInputException.
-        string output = RunWithConsole("", () => merchant.Visit(player, messages));
+        string output = RunWithConsole("", () => merchant.Visit(player, messages, new Prompt(messages)));
 
         StringAssert.Contains(output, messages.GetMessage("merchant_empty_stall"));
         Assert.IsFalse(output.Contains("Oswin, a Merchant"));

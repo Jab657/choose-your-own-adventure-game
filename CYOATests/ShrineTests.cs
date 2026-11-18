@@ -62,7 +62,7 @@ public class ShrineTests
         Player player = CreatePlayer();
         Messages messages = CreateMessages(language);
 
-        string output = RunWithConsole(input + "\n", () => shrine.Visit(player, messages));
+        string output = RunWithConsole(input + "\n", () => shrine.Visit(player, messages, new Prompt(messages)));
 
         foreach (string key in new[] { "shrine_intro", "shrine_prompt", "shrine_leave" })
         {
@@ -88,7 +88,7 @@ public class ShrineTests
         Player player = CreatePlayer();
         Messages messages = CreateMessages(language);
 
-        string output = RunWithConsole(input + "\n", () => shrine.Visit(player, messages));
+        string output = RunWithConsole(input + "\n", () => shrine.Visit(player, messages, new Prompt(messages)));
 
         foreach (string key in new[] { "shrine_offering_made", "shrine_health_now", "shrine_gold_now" })
             Assert.AreNotEqual($"[{key}]", messages.GetMessage(key), $"'{key}' is missing in {language}.");
@@ -116,7 +116,7 @@ public class ShrineTests
         Player player = CreatePlayer();
         Messages messages = CreateMessages(language);
 
-        string output = RunWithConsole(input + "\n", () => shrine.Visit(player, messages));
+        string output = RunWithConsole(input + "\n", () => shrine.Visit(player, messages, new Prompt(messages)));
 
         Assert.AreNotEqual("[shrine_prayer_answered]", messages.GetMessage("shrine_prayer_answered"), $"Missing in {language}.");
         StringAssert.Contains(output, messages.GetMessage("shrine_prayer_answered"));
@@ -139,7 +139,7 @@ public class ShrineTests
         Player player = CreatePlayer();
         Messages messages = CreateMessages(language);
 
-        string output = RunWithConsole(input + "\n", () => shrine.Visit(player, messages));
+        string output = RunWithConsole(input + "\n", () => shrine.Visit(player, messages, new Prompt(messages)));
 
         Assert.AreNotEqual("[shrine_prayer_displeased]", messages.GetMessage("shrine_prayer_displeased"), $"Missing in {language}.");
         StringAssert.Contains(output, messages.GetMessage("shrine_prayer_displeased"));
@@ -153,8 +153,10 @@ public class ShrineTests
     [TestMethod]
     public void Visit_EnglishPray_PrintsOutcomeThenHealthPoints()
     {
+        Messages messages = CreateMessages("English");
+
         string output = RunWithConsole("p\n",
-            () => new Shrine(new ScriptedDie(6)).Visit(CreatePlayer(), CreateMessages("English")));
+            () => new Shrine(new ScriptedDie(6)).Visit(CreatePlayer(), messages, new Prompt(messages)));
 
         int outcome = output.IndexOf("Your prayer is answered.");
         int health = output.IndexOf("You now have 22 Health Points.");
@@ -166,7 +168,7 @@ public class ShrineTests
     {
         Messages messages = CreateMessages("English");
 
-        string output = RunWithConsole("o\n", () => new Shrine(new ScriptedDie()).Visit(CreatePlayer(), messages));
+        string output = RunWithConsole("o\n", () => new Shrine(new ScriptedDie()).Visit(CreatePlayer(), messages, new Prompt(messages)));
 
         int outcome = output.IndexOf("You lay 5 Gold at the foot of the Shrine.");
         int health = output.IndexOf("You now have 25 Health Points.");
@@ -186,7 +188,7 @@ public class ShrineTests
         player.Gold = 0; // spent on the Magical Weapon
         Messages messages = CreateMessages(language);
 
-        string output = RunWithConsole("o\nl\n", () => shrine.Visit(player, messages));
+        string output = RunWithConsole("o\nl\n", () => shrine.Visit(player, messages, new Prompt(messages)));
 
         Assert.AreNotEqual("[shrine_not_enough_gold]", messages.GetMessage("shrine_not_enough_gold"), $"Missing in {language}.");
         StringAssert.Contains(output, string.Format(messages.GetMessage("shrine_not_enough_gold"), 5, 0));
@@ -204,9 +206,10 @@ public class ShrineTests
     {
         Player player = CreatePlayer();
         player.Gold = 3;
+        Messages messages = CreateMessages("English");
 
         string output = RunWithConsole("o\nl\n",
-            () => new Shrine(new ScriptedDie()).Visit(player, CreateMessages("English")));
+            () => new Shrine(new ScriptedDie()).Visit(player, messages, new Prompt(messages)));
 
         StringAssert.Contains(output, "The offering costs 5 Gold, and you have only 3.");
     }
@@ -216,7 +219,7 @@ public class ShrineTests
     {
         Messages messages = CreateMessages("English");
 
-        string output = RunWithConsole("l\n", () => new Shrine(new ScriptedDie()).Visit(CreatePlayer(), messages));
+        string output = RunWithConsole("l\n", () => new Shrine(new ScriptedDie()).Visit(CreatePlayer(), messages, new Prompt(messages)));
 
         StringAssert.Contains(output, "'o'");
         StringAssert.Contains(output, "'p'");
@@ -229,7 +232,7 @@ public class ShrineTests
         Messages messages = CreateMessages("English");
         Player player = CreatePlayer();
 
-        string output = RunWithConsole("x\n\nl\n", () => new Shrine(new ScriptedDie()).Visit(player, messages));
+        string output = RunWithConsole("x\n\nl\n", () => new Shrine(new ScriptedDie()).Visit(player, messages, new Prompt(messages)));
 
         int invalidCount = output.Split(messages.GetMessage("invalid")).Length - 1;
         int promptCount = output.Split(messages.GetMessage("shrine_prompt")).Length - 1;
@@ -247,7 +250,7 @@ public class ShrineTests
         Messages messages = CreateMessages("English");
 
         Assert.ThrowsException<EndOfInputException>(
-            () => RunWithConsole("", () => new Shrine(new ScriptedDie()).Visit(CreatePlayer(), messages)));
+            () => RunWithConsole("", () => new Shrine(new ScriptedDie()).Visit(CreatePlayer(), messages, new Prompt(messages))));
     }
 
     [TestMethod]
