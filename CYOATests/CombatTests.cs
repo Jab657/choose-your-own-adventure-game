@@ -1,6 +1,11 @@
 [TestClass]
+[DoNotParallelize]
 public class CombatTests
 {
+    private const string AttackPrompt = "Enter 'a' to attack or 'r' to retreat.";
+    private const string InvalidMessage = "Invalid choice. Please try again.";
+    private const string DragonAttackLine = "Smolderfang attacks TestHero with claws!";
+
     private Messages CreateEnglishMessages()
     {
         Messages messages = new Messages();
@@ -35,6 +40,102 @@ public class CombatTests
         };
 
         return dragon;
+    }
+
+    // Health high enough that no attack round can end the fight, so only the answers decide it.
+    private Combat CreateCombatNobodyCanWin(Messages messages)
+    {
+        Player player = CreateTestPlayer();
+        player.HealthPoints = 1000;
+        Dragon dragon = CreateTestDragon();
+        dragon.HealthPoints = 1000;
+        return new Combat(player, dragon, messages);
+    }
+
+    // Runs the action with scripted console input and returns everything written to the console.
+    private static string RunWithConsole(string input, Action action)
+    {
+        TextReader originalIn = Console.In;
+        TextWriter originalOut = Console.Out;
+        var output = new StringWriter();
+
+        try
+        {
+            Console.SetIn(new StringReader(input));
+            Console.SetOut(output);
+            action();
+        }
+        finally
+        {
+            Console.SetIn(originalIn);
+            Console.SetOut(originalOut);
+        }
+
+        return output.ToString();
+    }
+
+    // Each attack round ends with the dragon's attack, which opens with this line.
+    private static int CountAttackRounds(string output)
+    {
+        return CountLines(output, DragonAttackLine);
+    }
+
+    private static int CountLines(string output, string line)
+    {
+        return output.Split(Environment.NewLine).Count(outputLine => outputLine == line);
+    }
+
+    [TestMethod]
+    public void StartCombat_InvalidAnswerThenRetreat_AsksAgainWithoutAnotherAttackRound()
+    {
+        Combat combat = CreateCombatNobodyCanWin(CreateEnglishMessages());
+
+        string output = RunWithConsole("x\nr\n", () => combat.StartCombat());
+
+        Assert.AreEqual(1, CountAttackRounds(output));
+        Assert.AreEqual(1, CountLines(output, InvalidMessage));
+        Assert.AreEqual(2, CountLines(output, AttackPrompt));
+        Assert.IsTrue(output.IndexOf(InvalidMessage) < output.LastIndexOf(AttackPrompt),
+            "The prompt should be shown again after the invalid message.");
+        Assert.IsTrue(combat.PlayerRetreated);
+    }
+
+    [TestMethod]
+    public void StartCombat_InventoryCommand_IsInvalidAndDoesNotShowInventory()
+    {
+        Messages messages = CreateEnglishMessages();
+        Combat combat = CreateCombatNobodyCanWin(messages);
+
+        string output = RunWithConsole("i\nr\n", () => combat.StartCombat());
+
+        Assert.AreEqual(1, CountAttackRounds(output));
+        Assert.AreEqual(1, CountLines(output, InvalidMessage));
+        Assert.AreEqual(2, CountLines(output, AttackPrompt));
+        Assert.IsFalse(output.Contains(messages.GetMessage("inventory_header")), "Combat should not show the Inventory.");
+        Assert.IsTrue(combat.PlayerRetreated);
+    }
+
+    [TestMethod]
+    public void StartCombat_AttackThenRetreat_RunsAnotherAttackRoundThenRetreats()
+    {
+        Combat combat = CreateCombatNobodyCanWin(CreateEnglishMessages());
+
+        string output = RunWithConsole(" A \nretreat\n", () => combat.StartCombat());
+
+        Assert.AreEqual(2, CountAttackRounds(output));
+        Assert.AreEqual(0, CountLines(output, InvalidMessage));
+        Assert.AreEqual(1, CountLines(output, "You hastily retreat licking your wounds."));
+        Assert.IsTrue(combat.PlayerRetreated);
+    }
+
+    [TestMethod]
+    [DataRow("", DisplayName = "at the first prompt")]
+    [DataRow("x\n", DisplayName = "after an invalid answer")]
+    public void StartCombat_InputEndsAtPrompt_ThrowsEndOfInput(string input)
+    {
+        Combat combat = CreateCombatNobodyCanWin(CreateEnglishMessages());
+
+        Assert.ThrowsException<EndOfInputException>(() => RunWithConsole(input, () => combat.StartCombat()));
     }
 
     [TestMethod]
